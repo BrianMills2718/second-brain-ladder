@@ -107,7 +107,7 @@ const CONCEPTS: Concept[] = [
     prerequisites: ["entailment"], contrasts: ["open-world-assumption"], introducedIn: "sb-reasoning" },
   { id: "consistency", term: "consistency", layer: "logic",
     short: "Whether your @c{axiom}s + data contain no contradiction — a @c{reasoner} can check it.",
-    example: "With `Person`/`Note` @c{disjointness}, entailing `note_1 a Person` (from `wrote: Person→Note`) while `note_1 a Note` is inconsistent.",
+    example: "The bad triple `note_1 wrote Ada` entails `note_1 a Person` (domain of `wrote`); with `Person`/`Note` @c{disjointness} and `note_1 a Note`, that's inconsistent.",
     prerequisites: ["reasoner", "axiom", "disjointness"], introducedIn: "sb-reasoning" },
   { id: "description-logic", term: "description logic", layer: "logic",
     short: "The decidable fragment of logic under OWL — @c{class}es as concepts, @c{property-schema} as roles, @c{subclass} as subsumption.",

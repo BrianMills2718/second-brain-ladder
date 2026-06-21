@@ -28,7 +28,7 @@ export const sbReasoning: Lesson = {
 :Ada a :Person .                     # derived, never written
 \`\`\`
 
-It also checks **@c{consistency}** — with \`Person\` and \`Note\` declared *disjoint*, a reasoner that entails \`:note_1 a :Person\` (from \`wrote: Person→Note\`) alongside \`:note_1 a :Note\` flags a contradiction. (Without the disjointness axiom it would just *infer* the extra type — open-world, no contradiction.)`,
+It also checks **@c{consistency}** — with \`Person\` and \`Note\` declared *disjoint*, the bad triple \`:note_1 :wrote :Ada\` entails \`:note_1 a :Person\` (subject = domain of \`wrote\`); alongside \`:note_1 a :Note\` that's a contradiction. (Without the disjointness axiom it would just *infer* the extra type — open-world, no contradiction.)`,
     },
     {
       heading: "The open-world gotcha",
