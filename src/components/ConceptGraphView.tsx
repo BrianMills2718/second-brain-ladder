@@ -73,9 +73,36 @@ function layout(): Record<string, { x: number; y: number }> {
 
 const plain = (s: string) => s.replace(/@[cnt]\{([^}|]+)(?:\|[^}]+)?\}/g, "$1").replace(/\$/g, "");
 
+/** Selectable depth (R13): show concepts up to the chosen band. At ~50 concepts the
+ *  full graph is near the legibility ceiling, so collapsing to a band is what keeps a
+ *  page readable as the curriculum deepens. */
+const BAND_ORDER = ["foundations", "practitioner", "expert", "frontier"] as const;
+const bandRank = (b?: string): number => Math.max(0, BAND_ORDER.indexOf((b ?? "foundations") as (typeof BAND_ORDER)[number]));
+const DEPTH_CHOICES: { label: string; max: number }[] = [
+  { label: "Foundations", max: 0 },
+  { label: "+ Practitioner", max: 1 },
+  { label: "All depths", max: 3 },
+];
+
 export function ConceptGraphView() {
   const [sel, setSel] = useState<string | null>(null);
   const [coreOnly, setCoreOnly] = useState(false);
+  const [maxBand, setMaxBand] = useState(3);
+  // Effective band = max of a concept's own band and all its prerequisites' — a
+  // concept is only as shallow as its deepest prerequisite. Propagating up the DAG
+  // guarantees each depth view is a CLOSED sub-graph (no dangling deps), regardless
+  // of how the raw bands were hand-tagged. (Hand-tagging alone broke this: a
+  // `foundations` concept had a `practitioner` prerequisite — see MACHINERY R13.)
+  const effBand = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const id of conceptTopoOrder()) {
+      let b = bandRank(CONCEPT_BY_ID[id]?.band);
+      for (const p of CONCEPT_BY_ID[id]?.prerequisites ?? []) b = Math.max(b, m[p] ?? 0);
+      m[id] = b;
+    }
+    return m;
+  }, []);
+  const tooDeep = (id: string) => (effBand[id] ?? 0) > maxBand;
   const positions = useMemo(layout, []);
   const core = useMemo(() => goalClosure(), []);
   const clusterOf = useMemo(() => {
@@ -114,11 +141,11 @@ export function ConceptGraphView() {
             padding: 6,
             fontSize: 12,
             width: 152,
-            opacity: coreOnly && enrichment ? 0.18 : 1,
+            opacity: tooDeep(c.id) ? 0.08 : coreOnly && enrichment ? 0.18 : 1,
           },
         };
       }),
-    [positions, clusterOf, core, coreOnly],
+    [positions, clusterOf, core, coreOnly, maxBand],
   );
 
   const edges: Edge[] = useMemo(() => {
@@ -127,6 +154,7 @@ export function ConceptGraphView() {
       for (const p of c.prerequisites) {
         if (!positions[p]) continue;
         const incident = sel === c.id || sel === p;
+        const hidden = tooDeep(c.id) || tooDeep(p);
         const dimmed = sel !== null && !incident;
         const kind = prereqKindOf(c.id, p) ?? "is-a";
         const kcolor = KIND_COLOR[kind];
@@ -141,7 +169,7 @@ export function ConceptGraphView() {
             verbose: `${c.term} ${kind} ${CONCEPT_BY_ID[p]?.term ?? p} — ${prereqWhy(c.id, p) ?? "(unannotated)"}`,
             color: kcolor,
           },
-          style: { stroke: kcolor, strokeWidth: incident ? 2.75 : 1.5, opacity: dimmed ? 0.1 : 0.9 },
+          style: { stroke: kcolor, strokeWidth: incident ? 2.75 : 1.5, opacity: hidden ? 0.04 : dimmed ? 0.1 : 0.9 },
           markerEnd: { type: MarkerType.ArrowClosed, color: kcolor },
           zIndex: incident ? 10 : 0,
         });
@@ -167,12 +195,12 @@ export function ConceptGraphView() {
             verbose: `${c.term} ↔ ${CONCEPT_BY_ID[x]?.term ?? x}: understood against each other (not a dependency)`,
             color: "#64748b",
           },
-          style: { stroke: "#94a3b8", strokeWidth: 1.5, strokeDasharray: "4 4", opacity: dimmed ? 0.1 : 0.7 },
+          style: { stroke: "#94a3b8", strokeWidth: 1.5, strokeDasharray: "4 4", opacity: (tooDeep(c.id) || tooDeep(x)) ? 0.04 : dimmed ? 0.1 : 0.7 },
         });
       }
     }
     return es;
-  }, [positions, sel]);
+  }, [positions, sel, maxBand]);
 
   const selected = sel ? CONCEPT_BY_ID[sel] : null;
   const neededBy = selected
@@ -197,6 +225,20 @@ export function ConceptGraphView() {
           ))}
           <li><span className="cgv-key dashed" /> contrasts (mutual, not a dependency)</li>
           <li><span className="cgv-key cluster" /> in a dependency cycle (a modeling error — should not appear)</li>
+          <li className="cgv-depth">
+            <span className="cgv-depth-label">depth:</span>
+            {DEPTH_CHOICES.map((d) => (
+              <button
+                key={d.label}
+                type="button"
+                className={`cgv-toggle ${maxBand === d.max ? "is-on" : ""}`}
+                onClick={() => setMaxBand(d.max)}
+                aria-pressed={maxBand === d.max}
+              >
+                {d.label}
+              </button>
+            ))}
+          </li>
           <li>
             <button
               type="button"
