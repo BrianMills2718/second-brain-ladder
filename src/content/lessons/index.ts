@@ -18,6 +18,8 @@ import { sbLlmKg } from "./sb-llm-kg";
 import { sbKgml } from "./sb-kgml";
 import { sbEval } from "./sb-eval";
 import { sbReasoningAdv } from "./sb-reasoning-adv";
+import { sbGovernance } from "./sb-governance";
+import { sbGnn } from "./sb-gnn";
 
 export const LESSONS: Lesson[] = [
   sbOrientation,
@@ -35,11 +37,12 @@ export const LESSONS: Lesson[] = [
   sbKgml,
   sbEval,
   sbReasoningAdv,
+  sbGovernance,
+  sbGnn,
 ];
 
 export const UPCOMING: { stage: number; title: string }[] = [
-  { stage: 15, title: "Governance & Quality (FAIR, lineage, epistemic status)" },
-  { stage: 16, title: "Graph Neural Networks (message passing, R-GCN) — Frontier" },
+  { stage: 17, title: "Capstone: Design & Operate Your Second Brain" },
 ];
 
 export function lessonById(id: string): Lesson | undefined {
