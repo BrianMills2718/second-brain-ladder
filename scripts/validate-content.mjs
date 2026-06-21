@@ -30,7 +30,8 @@ writeFileSync(
    export { ASSESSMENTS, ASSESSMENT_BY_ID, RUBRICS } from ${JSON.stringify(process.cwd() + "/src/content/assessments.ts")};
    export { CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};
    export { GOAL_CONCEPTS } from ${JSON.stringify(process.cwd() + "/src/content/derive.ts")};
-   export { layoutSanity } from ${JSON.stringify(process.cwd() + "/src/content/conceptLayout.ts")};`,
+   export { layoutSanity } from ${JSON.stringify(process.cwd() + "/src/content/conceptLayout.ts")};
+   export { REQUIRED_CONCEPTS, DEFERRED_CONCEPTS } from ${JSON.stringify(process.cwd() + "/src/content/coverage.ts")};`,
 );
 await build({
   entryPoints: [stub],
@@ -40,7 +41,7 @@ await build({
   logLevel: "error",
 });
 
-const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS, GOAL_CONCEPTS, layoutSanity } = await import(pathToFileURL(out).href);
+const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS, GOAL_CONCEPTS, layoutSanity, REQUIRED_CONCEPTS, DEFERRED_CONCEPTS } = await import(pathToFileURL(out).href);
 
 const errors = [];
 const ok = (cond, msg) => { if (!cond) errors.push(msg); };
@@ -449,6 +450,12 @@ for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 for (const f of glossaryCoverage(CONCEPT_GRAPH.concepts, glossarySlugs)) ok(false, f);
 // R11 — layout-sanity (FAIL: the concept graph would render collapsed/under-spread).
 for (const f of layoutSanity(CONCEPT_GRAPH.concepts, (id) => stageOrder[id] ?? 0)) ok(false, f);
+// R6 — domain coverage (FAIL: a required Tier-A key idea is missing; WARN on deferred).
+{
+  const ids = new Set(CONCEPT_GRAPH.concepts.map((c) => c.id));
+  for (const id of REQUIRED_CONCEPTS) ok(ids.has(id), `coverage: required concept "${id}" missing (docs/DOMAIN_COVERAGE.md Tier-A)`);
+  for (const d of DEFERRED_CONCEPTS) if (!ids.has(d.id)) warn(`coverage-deferred: ${d.id} — ${d.note}`);
+}
 // R12 — structural lints (advisory WARN). prose-forward-ref + contrast-staging +
 // goal/sink-drift are emitted. prereqMinimality and layerConsistency are computed in
 // gates.mjs but NOT emitted: in this model `prerequisites` are DIRECT conceptual
