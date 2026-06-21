@@ -39,7 +39,7 @@ It also checks **@c{consistency}** — with \`Person\` and \`Note\` declared *di
 - **@c{transitive-property}** — \`ancestorOf\` chains close on their own.
 - **@c{inverse-property}** — declare \`hasParent\` the inverse of \`hasChild\` and assert either direction; the other is entailed.
 - **@c{symmetric-property}** — \`siblingOf\` holds both ways automatically.
-- **@c{cardinality-restriction}** / **@c{functional-property}** — "exactly one biological mother"; two different ones is an *inconsistency*, not a quiet overwrite.
+- **@c{cardinality-restriction}** / **@c{functional-property}** — "exactly one birth year"; two values *known to differ* (distinct literals) is an *inconsistency*, not a quiet overwrite.
 
 You assert a handful of facts and a few rules; the reasoner gives you the closure and flags the conflicts.`,
     },
