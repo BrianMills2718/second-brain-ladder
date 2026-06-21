@@ -411,6 +411,8 @@ kbd {
 .pp-nochecks { font-size: 13px; color: var(--ink-soft); margin: 0; }
 
 .concept-panel { margin-bottom: 16px; }
+.cp-deeper { margin: 10px 0 2px; padding-left: 12px; border-left: 2px solid var(--line); }
+.cp-deeper > summary { font-size: 13px; color: var(--ink-soft); }
 .cp-list { display: flex; flex-direction: column; }
 .cp-row { display: grid; grid-template-columns: 130px 1fr; gap: 12px; padding: 9px 0; border-top: 1px dashed var(--line); align-items: baseline; }
 .cp-row:first-child { border-top: none; }

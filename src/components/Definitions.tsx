@@ -238,11 +238,17 @@ function ConceptRow({ id }: { id: string }) {
 }
 
 /** The concepts a stage introduces, listed simplest-first by a topological sort
- *  of the concept DAG (ADR-0002) — the order is derived, not hand-authored. */
+ *  of the concept DAG (ADR-0002). Grouped by depth band (R13): Foundations are
+ *  listed directly; deeper (practitioner+) concepts are tucked behind a nested
+ *  expander so a deep stage's panel doesn't dump 18 definitions at once (R2). */
 export function ConceptPanel({ lesson }: { lesson: Lesson }) {
-  const stageIds = new Set(conceptsForStage(lesson.id).map((c) => c.id));
-  if (stageIds.size === 0) return null;
-  const ordered = conceptTopoOrder().filter((id) => stageIds.has(id));
+  const stage = conceptsForStage(lesson.id);
+  if (stage.length === 0) return null;
+  const order = conceptTopoOrder();
+  const rank = (id: string) => order.indexOf(id);
+  const sorted = [...stage].sort((a, b) => rank(a.id) - rank(b.id));
+  const foundations = sorted.filter((c) => (c.band ?? "foundations") === "foundations");
+  const deeper = sorted.filter((c) => (c.band ?? "foundations") !== "foundations");
 
   return (
     <Rollup
@@ -250,15 +256,32 @@ export function ConceptPanel({ lesson }: { lesson: Lesson }) {
       summary={
         <span>
           Concepts introduced here, in dependency order{" "}
-          <span className="np-count">({ordered.length})</span> — click to expand
+          <span className="np-count">({sorted.length})</span> — click to expand
         </span>
       }
     >
       <div className="cp-list">
-        {ordered.map((id) => (
-          <ConceptRow key={id} id={id} />
+        {foundations.map((c) => (
+          <ConceptRow key={c.id} id={c.id} />
         ))}
       </div>
+      {deeper.length > 0 && (
+        <Rollup
+          className="concept-panel cp-deeper"
+          summary={
+            <span>
+              Going deeper{" "}
+              <span className="np-count">({deeper.length} practitioner+ concept{deeper.length > 1 ? "s" : ""})</span>
+            </span>
+          }
+        >
+          <div className="cp-list">
+            {deeper.map((c) => (
+              <ConceptRow key={c.id} id={c.id} />
+            ))}
+          </div>
+        </Rollup>
+      )}
     </Rollup>
   );
 }
