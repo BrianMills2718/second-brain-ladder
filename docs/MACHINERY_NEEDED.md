@@ -94,6 +94,17 @@ gotcha — because nothing forces coverage of a domain's known hard ideas).
 Machinery: seed from authoritative sources (a syllabus, a textbook TOC, an
 existing ontology) and check the concept set covers the declared key ideas; flag
 omissions.
+**Made concrete (2026-06-21):** the reviewer pointed out the 35-concept graph
+omits whole expert-map branches — n-ary relations, reification, named graphs, *all*
+of querying (the homepage promises "queryable" with no query concept), most OWL
+expressivity (disjointness, restrictions, property chains), ontology engineering &
+**reuse** (SUMO/FOAF/SKOS), construction sub-steps. The coverage contract is now
+written down: **`docs/DOMAIN_COVERAGE.md`** — a tiered key-ideas syllabus (Tier A
+required / B suggested / C explicit non-goal) with per-area ✓/◐/✗ status. The R6
+gate reads Tier A as required-coverage (fail on absent), Tier C as non-goals (never
+flag), Tier B as warnings. Two of the absent Tier-A concepts (`disjointness`,
+`validation-vs-inference`) also **fix R10 content bugs** — coverage and correctness
+converge. This is the artifact R6 was hand-waving at; it's now a file to gate on.
 
 ## R7. Contrasts are first-class and under-tooled
 The "prevent category errors" mission lives in `contrasts`, but they're easy to
