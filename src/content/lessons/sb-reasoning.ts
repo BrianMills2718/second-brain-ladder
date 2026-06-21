@@ -31,6 +31,19 @@ export const sbReasoning: Lesson = {
 It also checks **@c{consistency}** — with \`Person\` and \`Note\` declared *disjoint*, the bad triple \`:note_1 :wrote :Ada\` entails \`:note_1 a :Person\` (subject = domain of \`wrote\`); alongside \`:note_1 a :Note\` that's a contradiction. (Without the disjointness axiom it would just *infer* the extra type — open-world, no contradiction.)`,
     },
     {
+      heading: "What the logic buys you: say more, derive more, catch more",
+      body: `The power of the symbolic side is the *general* rules you state once and the reasoner applies everywhere:
+
+- **@c{disjointness}** — say a \`Person\` can't be a \`Place\`; now claiming something is both is a *caught* contradiction.
+- **@c{property-chain}** — "the father of my father is my grandfather": \`hasParent ∘ hasParent ⊑ hasGrandparent\`, and grandparents are derived for free.
+- **@c{transitive-property}** — \`ancestorOf\` chains close on their own.
+- **@c{inverse-property}** — declare \`hasParent\` the inverse of \`hasChild\` and assert either direction; the other is entailed.
+- **@c{symmetric-property}** — \`siblingOf\` holds both ways automatically.
+- **@c{cardinality-restriction}** / **@c{functional-property}** — "exactly one biological mother"; two different ones is an *inconsistency*, not a quiet overwrite.
+
+You assert a handful of facts and a few rules; the reasoner gives you the closure and flags the conflicts.`,
+    },
+    {
       heading: "The open-world gotcha",
       body: `RDF/OWL uses the **@c{open-world-assumption}**: a fact you didn't store is *unknown*, not false. Databases use the **@c{closed-world-assumption}** (missing = false). Mixing them up is the most common second-brain modeling bug: "the graph doesn't say Ada knows Bob" does **not** mean she doesn't.`,
     },
