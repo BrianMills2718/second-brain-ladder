@@ -37,6 +37,13 @@ expect(realResult.length === 0, `richness gate FAILED the real graph (should pas
 const bandResult = bandClosureGate(CONCEPT_GRAPH.concepts);
 expect(bandResult.length === 0, `band-closure FAILED the real graph: ${bandResult.join("; ")}`);
 
+// 3b. Band closure FIRES on a seeded violation (a shallow concept with a deep prereq).
+const seeded = [
+  { id: "deep", term: "deep", layer: "logic", band: "practitioner", introducedIn: "s1", prerequisites: [] },
+  { id: "shallow", term: "shallow", layer: "logic", band: "foundations", introducedIn: "s1", prerequisites: ["deep"] },
+];
+expect(bandClosureGate(seeded).length > 0, "band-closure did NOT fire on a foundations concept with a practitioner prerequisite");
+
 // 4. Report (informational) the real graph's hub/hard stats.
 const { dependants, prereqs } = degrees(CONCEPT_GRAPH.concepts);
 const hubs = CONCEPT_GRAPH.concepts.filter((c) => dependants[c.id] >= 3).length;
