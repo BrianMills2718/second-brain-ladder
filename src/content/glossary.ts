@@ -4,8 +4,11 @@
  * look-up, not closure.)
  */
 import type { GlossaryEntry } from "../types";
+import { CONCEPT_GRAPH, CONCEPT_BY_ID } from "./concepts";
 
-export const GLOSSARY: GlossaryEntry[] = [
+/** Hand-curated entries (better-worded than the auto-derived, or with extra
+ *  cross-links). These OVERRIDE the derived entry for the same term. */
+const CURATED: GlossaryEntry[] = [
   { term: "knowledge graph", definition: "Facts represented as a graph of entities connected by named relations (triples). The data layer of a second brain.", example: "Your notes + who/what they reference.", related: ["triple", "ontology"] },
   { term: "triple", definition: "A (subject, predicate, object) statement — the atom of a knowledge graph.", example: "`(Ada, wrote, note_1)`.", related: ["knowledge graph", "RDF"] },
   { term: "entity", definition: "An individual thing the graph knows about — a person, note, or idea.", example: "`Ada_Lovelace`.", related: ["class"] },
@@ -22,6 +25,29 @@ export const GLOSSARY: GlossaryEntry[] = [
   { term: "embedding", definition: "A learned vector representation of an entity/relation; supports similarity & link prediction, but carries no guarantees.", example: "node2vec, TransE, text embeddings.", related: ["neurosymbolic"] },
   { term: "neurosymbolic", definition: "Combining learned (neural) and explicit (symbolic) representations — e.g. LLM extracts triples, the ontology/reasoner validates them.", example: "LLM proposes, SHACL/reasoner verifies.", related: ["embedding", "ontology"] },
 ];
+
+/** Strip inline chips to plain text for the lookup drawer. */
+const plain = (s: string): string => s.replace(/@[cnt]\{([^}|]+)(?:\|[^}]+)?\}/g, "$1");
+
+/** One entry per concept, derived from its definition. Guarantees the glossary
+ *  covers every concept (R4) and can't drift from concepts.ts — the gate in
+ *  validate-content.mjs enforces this. Curated entries override by term. */
+const curatedTerms = new Set(CURATED.map((e) => e.term.toLowerCase()));
+const DERIVED: GlossaryEntry[] = CONCEPT_GRAPH.concepts
+  .filter((c) => !curatedTerms.has(c.term.toLowerCase()))
+  .map((c) => ({
+    term: c.term,
+    definition: plain(c.short),
+    example: c.example ? plain(c.example) : undefined,
+    related: [...new Set([...(c.prerequisites ?? []), ...(c.contrasts ?? [])])]
+      .map((id) => CONCEPT_BY_ID[id]?.term)
+      .filter((t): t is string => !!t)
+      .slice(0, 5),
+  }));
+
+export const GLOSSARY: GlossaryEntry[] = [...CURATED, ...DERIVED].sort((a, b) =>
+  a.term.localeCompare(b.term),
+);
 
 export const GLOSSARY_INDEX: Record<string, GlossaryEntry> = Object.fromEntries(
   GLOSSARY.map((e) => [e.term.toLowerCase(), e]),

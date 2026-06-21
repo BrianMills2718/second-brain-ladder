@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeFileSync, rmSync } from "node:fs";
 import { pathToFileURL } from "node:url";
-import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, prereqMinimality, goalSinkDrift, layerConsistency } from "./gates.mjs";
+import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, prereqMinimality, goalSinkDrift, layerConsistency, glossaryCoverage } from "./gates.mjs";
 
 const out = join(tmpdir(), `godel-content-${process.pid}.mjs`);
 
@@ -444,6 +444,8 @@ const prereqKindOf = (c, p) => PREREQ_KIND[`${c}>${p}`];
 for (const f of richnessGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 // R13 — per-band closure (FAIL: a concept shallower than a prerequisite).
 for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
+// R4 — glossary coverage (FAIL: a concept term with no glossary entry).
+for (const f of glossaryCoverage(CONCEPT_GRAPH.concepts, glossarySlugs)) ok(false, f);
 // R12 — structural lints (advisory WARN). prose-forward-ref + contrast-staging +
 // goal/sink-drift are emitted. prereqMinimality and layerConsistency are computed in
 // gates.mjs but NOT emitted: in this model `prerequisites` are DIRECT conceptual
