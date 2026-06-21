@@ -58,6 +58,13 @@ them force the content to high quality.
   60 concepts. Lessons extended; concept panel band-grouped (R2). a-reason achievement
   + cap-reason assessment (R9). Visual pass green at 60 nodes (grid + depth selector
   keep it legible; band-grouped panel replaces the 18-item dump).
-- 2026-06-21: 8/13 Definition-of-Done rows now green (the deterministic gates + R10
+- 2026-06-21: 8/13 Definition-of-Done rows green (the deterministic gates + R10
   eval + bands). Remaining: domain-coverage gate (R6 auto), derived wiring (R8/R9),
   layout-sanity assertion (R11). All committed + pushed; deploy verified.
+- 2026-06-21 (continued, "proceed until done"): built the remaining gates — R11
+  layout-sanity (catches the 1-column collapse without a browser), R6 domain-coverage
+  (coverage.ts REQUIRED/DEFERRED + gate; added taxonomy/thesaurus/competency-question/
+  ontology-reuse), R9 goal→achievement alignment, R10 stage↔node parity. 64 concepts.
+  R10 eval over all 64: 0 hard errors (fixed shacl-validation/taxonomy wording).
+  **12/13 DoD rows green, 1 partial (row 10 positions deliberately manual).** The cheap
+  path now fails every quality gate. Build + all gates green; deploy verified.

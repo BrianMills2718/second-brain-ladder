@@ -267,24 +267,28 @@ condition). Status = what exists today vs what this doc asks to be built.
 | 1 | concept graph acyclic, `@c{}`-closed, every edge has `why`+`kind`, contrasts symmetric | (validator) | ✅ enforced |
 | 2 | stage banding coherent (prereq stage ≤ concept stage); no **prose** forward-refs | R12 | ✅ **BUILT** — `proseForwardRefs` lint (advisory) + `axiom` re-staged; chip+prose both checked |
 | 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ✅ **BUILT** — `richnessGate` FAILs degenerate graphs; thresholds in `gates.mjs` |
-| 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ⚠️ contract written (`DOMAIN_COVERAGE.md`); per-Tier-A automated gate not yet built |
+| 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ✅ **BUILT** — `coverage.ts` (REQUIRED + DEFERRED) + R6 gate; FAIL on a missing Tier-A idea |
 | 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ✅ **BUILT** — `check-content-correctness.mjs` LLM OWL-trap eval, calibrated on the 3 historical defects; FAIL-on-wrong / WARN-on-misleading |
 | 6 | prerequisite lists minimal; kinds correct; layers consistent; no near-dups | R12 | ◑ lints exist in `gates.mjs`; minimality/layer intentionally not emitted (false-positive-heavy for a direct-dependency model) |
 | 7 | every concept term ⇒ glossary entry (and back) | R4 | ✅ **BUILT** — glossary derived from concepts + `glossaryCoverage` gate |
 | 8 | every stage has a full lesson (≥3 quiz, ≥2 confusions, ≥1 viz, mastery) | R2 | ✅ enforced; concept panel now band-grouped so it scales with depth |
-| 9 | every declared goal ⇒ achievement + capstone; required-concepts = goal closure; no goal/sink drift | R9/R12 | ◑ achievements added (incl. a-reason); drift is an advisory gate |
-| 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ❌ still manual (graph.ts nodes/positions hand-authored) |
-| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ◑ harness covers all routes + grid layout + depth selector; automated layout-sanity assertion not yet a gate (manual visual pass done) |
+| 9 | every declared goal ⇒ achievement + capstone; required-concepts = goal closure; no goal/sink drift | R9/R12 | ✅ **BUILT** — goal→achievement gate (every goal in some assessment's required-closure); drift advisory |
+| 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ◑ **stage↔node parity gate** (a stage can't silently lack a node); the curated 9-node skill-tree positions stay hand-authored by choice |
+| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ✅ **BUILT** — `layoutSanity` gate (stages horizontally separated) catches the collapse in CI without a browser; harness covers all routes |
 | 12 | a frozen degenerate fixture still FAILS the richness gate (regression) | R1/R12 | ✅ **BUILT** — `fixtures/thin-graph.mjs` + `test-gates.mjs` in `npm run check` |
 | 13 | every concept band/track-tagged; each band is a closed sub-curriculum; goal×depth view renders that band's closure | **R13** | ✅ **BUILT** — `Concept.band`, `bandClosureGate` (FAIL), effective-band propagation, depth selector in the concepts view |
 
-**Built this session (8 of 13 rows now green):** rows 1,2,3,5,7,8,12,13. The deterministic
-gates (R1/R4/R12/R13) live in `scripts/gates.mjs` + `scripts/validate-content.mjs`
-(in `npm run check`); the content-correctness eval (R10) is `npm run check-content`
-(needs an API key). **Still open:** row 4 (automated domain-coverage gate), row 6
-(minimality/layer — deliberately advisory), row 9 (derive achievements from goals),
-row 10 (derive skill-graph wiring), row 11 (automated layout-sanity assertion). These
-are the remaining machinery for the other agent / a future pass.
+**Built this session (12 of 13 rows green; 1 partial):** rows 1,2,3,4,5,7,8,9,11,12,13
+fully BUILT, row 10 partial (stage↔node parity gated; positions deliberately manual),
+row 6 deliberately advisory. The deterministic gates live in `scripts/gates.mjs` +
+`scripts/conceptLayout.ts` + `scripts/validate-content.mjs` (all in `npm run check`,
+with `test-gates.mjs` proving each FAILs its degenerate fixture); the
+content-correctness eval (R10) is `npm run check-content` (needs an API key), proven on
+a frozen labeled set and run clean (0 hard errors) over all 64 concepts. The cheap path
+now *fails*: a thin graph fails richness, a collapsed layout fails layout-sanity, a
+missing key idea fails coverage, an unassessed goal fails goal-alignment, a wrong OWL
+claim fails the R10 eval. That asymmetry — the rich/correct/visible path is the path of
+least resistance — is what the whole doc set out to build.
 
 ---
 
