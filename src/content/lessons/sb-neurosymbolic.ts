@@ -20,7 +20,7 @@ export const sbNeurosymbolic: Lesson = {
   sections: [
     {
       heading: "Neural proposes, symbolic verifies",
-      body: `Neither half is enough alone: pure symbolic can't read your prose; pure neural can't be trusted. **@c{neurosymbolic}** combines them — and the core loop is **@c{propose-verify}**: @c{llm-extraction} drafts triples, then the @c{reasoner} + shapes accept, repair, or reject them.
+      body: `Neither half is enough alone: pure symbolic can't read your prose; pure neural can't be trusted. **@c{neurosymbolic}** combines them — and the core loop is **@c{propose-verify}**: @c{llm-extraction} drafts triples, then the @c{reasoner} checks *consistency* and shape @c{shacl-validation} *rejects* ill-shaped ones — together they accept, repair, or reject.
 
 \`\`\`text
 text ──LLM──▶ candidate triples ──reasoner/SHACL──▶ accept / repair / reject ──▶ store

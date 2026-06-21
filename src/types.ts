@@ -310,12 +310,20 @@ export interface GlossaryEntry {
 // idea and renders recursively (a definition may contain further @c{} chips).
 // ---------------------------------------------------------------------------
 
+/** Selectable depth band (R13 / DOMAIN_COVERAGE.md). The curriculum is authored
+ *  comprehensively; the view is filtered to the learner's chosen band. `foundations`
+ *  is on by default; the rest are opt-in tracks layered on. Absent ⇒ `foundations`. */
+export type Band = "foundations" | "practitioner" | "expert" | "frontier";
+
 export interface Concept {
   /** kebab-case id; also the `@c{id}` chip key. */
   id: string;
   /** display label, e.g. "free variable". */
   term: string;
   layer: Layer;
+  /** Depth band for selectable expertise (R13). Defaults to `foundations`. A
+   *  concept's prerequisites should not sit in a *deeper* band than itself. */
+  band?: Band;
   /** One-line definition. May contain `$math$`, `@n{}` notation, and `@c{}`
    *  concept refs. Every `@c{}` ref MUST be a transitive prerequisite of this
    *  concept (enforced by the validator) — that is the "defined before use"
