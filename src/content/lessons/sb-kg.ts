@@ -61,6 +61,22 @@ CREATE (ada)-[:WROTE {year:1843}]->(n)
 
 The trade-off: a property graph has **no formal logical semantics**. It's a fast, flexible store, but a reasoner can't *derive* new facts from it the way it can from RDF/OWL. Pick property graphs for storage + traversal; pick RDF when meaning and inference matter.`,
     },
+    {
+      heading: "Querying — the point of a *queryable* second brain",
+      body: `A second brain is only as good as your ability to *ask it things*. A **@c{query}** retrieves the matches to a pattern instead of making you read the whole graph; the core is the **@c{basic-graph-pattern}** — triples with variables:
+
+\`\`\`sparql
+SELECT ?note WHERE { :Ada :wrote ?note . ?note :is_about :category_theory }
+\`\`\`
+
+That's **@c{sparql}** (for @c{rdf-graph}s). The property-graph world uses **@c{cypher}**:
+
+\`\`\`cypher
+MATCH (:Person {name:'Ada'})-[:WROTE]->(n:Note)-[:IS_ABOUT]->(:Topic {name:'CT'}) RETURN n
+\`\`\`
+
+Same question, two syntaxes. And a **@c{property-path}** lets you follow a link repeatedly — \`:Ada (:knows)+ ?p\` finds everyone reachable from Ada — something flat lookups can't do.`,
+    },
   ],
   visualizations: [
     {
