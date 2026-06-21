@@ -77,6 +77,17 @@ MATCH (:Person {name:'Ada'})-[:WROTE]->(n:Note)-[:IS_ABOUT]->(:Topic {name:'CT'}
 
 Same question, two syntaxes. And a **@c{property-path}** lets you follow a link repeatedly — \`:Ada (:knows)+ ?p\` finds everyone reachable from Ada — something flat lookups can't do.`,
     },
+    {
+      heading: "Facts about facts (when a triple isn't enough)",
+      body: `Real notes need more than flat binary triples:
+
+- **@c{n-ary-relation}** — "Ada gave note_1 to Bob in 1843" relates *four* things; a binary triple can't, so you make an intermediate event @c{entity}.
+- **@c{reification}** — turn a @c{triple} into a node so you can describe the *statement itself*: its source, confidence, or time. This is how @c{provenance} attaches.
+- **@c{named-graph}** — give a sub-graph its own @c{iri} so extracted facts, asserted facts, and different sources stay separate and trust-able.
+- **@c{temporal-validity}** — a fact true only for a while (\`Ada livesIn London\`, 1843–1852) lives on a reified statement or a named graph, not a bare triple.
+
+These are what make a second brain trustworthy rather than a pile of context-free assertions.`,
+    },
   ],
   visualizations: [
     {
