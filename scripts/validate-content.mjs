@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeFileSync, rmSync } from "node:fs";
 import { pathToFileURL } from "node:url";
-import { richnessGate } from "./gates.mjs";
+import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, prereqMinimality, goalSinkDrift, layerConsistency } from "./gates.mjs";
 
 const out = join(tmpdir(), `godel-content-${process.pid}.mjs`);
 
@@ -28,7 +28,8 @@ writeFileSync(
    export { NOTATION } from ${JSON.stringify(process.cwd() + "/src/content/notation.ts")};
    export { SKILL_GRAPH, ROOT_GOAL_ID } from ${JSON.stringify(process.cwd() + "/src/content/graph.ts")};
    export { ASSESSMENTS, ASSESSMENT_BY_ID, RUBRICS } from ${JSON.stringify(process.cwd() + "/src/content/assessments.ts")};
-   export { CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};`,
+   export { CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};
+   export { GOAL_CONCEPTS } from ${JSON.stringify(process.cwd() + "/src/content/derive.ts")};`,
 );
 await build({
   entryPoints: [stub],
@@ -38,7 +39,7 @@ await build({
   logLevel: "error",
 });
 
-const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS } = await import(pathToFileURL(out).href);
+const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS, GOAL_CONCEPTS } = await import(pathToFileURL(out).href);
 
 const errors = [];
 const ok = (cond, msg) => { if (!cond) errors.push(msg); };
@@ -434,8 +435,26 @@ for (const l of LESSONS) {
 
 // --- machinery gates (docs/MACHINERY_NEEDED.md) ---
 const warnings = [];
+const warn = (msg) => warnings.push(msg);
+const stageOrder = Object.fromEntries(LESSONS.map((l) => [l.id, l.stage]));
+const stageNum = (id) => stageOrder[id] ?? 0;
+const prereqKindOf = (c, p) => PREREQ_KIND[`${c}>${p}`];
+
 // R1 — structural richness (FAIL on a degenerate/chain-like graph).
 for (const f of richnessGate(CONCEPT_GRAPH.concepts)) ok(false, f);
+// R13 — per-band closure (FAIL: a concept shallower than a prerequisite).
+for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
+// R12 — structural lints (advisory WARN). prose-forward-ref + contrast-staging +
+// goal/sink-drift are emitted. prereqMinimality and layerConsistency are computed in
+// gates.mjs but NOT emitted: in this model `prerequisites` are DIRECT conceptual
+// dependencies that legitimately overlap transitive ones (a triple depends directly
+// on both entity AND relation), and is-a edges legitimately cross abstraction layers
+// (a property-graph is-a knowledge-graph: system realizing data) — so those two lints
+// are almost all false-positive here. Kept available for graphs where they apply.
+for (const w of proseForwardRefs(CONCEPT_GRAPH.concepts, stageNum)) warn(w);
+for (const w of contrastStaging(CONCEPT_GRAPH.concepts, stageNum)) warn(w);
+for (const w of goalSinkDrift(CONCEPT_GRAPH.concepts, GOAL_CONCEPTS)) warn(w);
+void prereqMinimality; void layerConsistency; // available, intentionally not emitted
 
 // Glossary uniqueness
 const gterms = new Set();
