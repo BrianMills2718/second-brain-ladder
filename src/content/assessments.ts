@@ -12,6 +12,8 @@ const M: Record<string, Misconception> = {
   pgReasons: { id: "pg-reasons", description: "Claims a property graph supports logical reasoning/entailment the way RDF/OWL does.", remediationNodeIds: ["c-kg"], fatal: true },
   trustNeural: { id: "trust-neural", description: "Treats LLM-extracted triples or embedding similarity as trusted facts, skipping the verify step.", remediationNodeIds: ["c-neural"], fatal: true },
   noVerify: { id: "no-verify", description: "Assumes ontology-grounded extraction removes the need to verify (reasoner/SHACL), or drops provenance once facts mix.", remediationNodeIds: ["c-neurosymbolic"], fatal: true },
+  owaContradiction: { id: "owa-contradiction", description: "Calls a domain/range or missing-fact situation 'inconsistent' under the open-world assumption, without a disjointness/cardinality axiom that actually forces the contradiction.", remediationNodeIds: ["c-reasoning"], fatal: true },
+  objectIdentity: { id: "object-identity", description: "Claims two differently-named individuals are inconsistent/distinct (ignores no-unique-names: they're inferred the same unless declared different).", remediationNodeIds: ["c-reasoning"], fatal: true },
 };
 
 export const RUBRICS: Record<string, Rubric> = {
@@ -22,6 +24,15 @@ export const RUBRICS: Record<string, Rubric> = {
       { id: "schema", description: "Separates a small TBox (classes, a subclass, a typed property) from the ABox data.", maxScore: 35 },
       { id: "reasoning", description: "Identifies one fact a reasoner would entail (e.g. via subclass) — derivation, not lookup.", maxScore: 25 },
       { id: "choice", description: "Makes a defensible RDF-vs-property-graph choice for the use case.", maxScore: 10 },
+    ],
+  },
+  "rub-reason": {
+    id: "rub-reason",
+    criteria: [
+      { id: "express", description: "Writes a small ontology using at least a disjointness axiom and one of: property chain, transitive/inverse property, or a defined class.", maxScore: 35 },
+      { id: "entail", description: "Identifies a specific fact the reasoner would *entail* (derived, not stored) from the axioms.", maxScore: 25 },
+      { id: "contradiction", description: "Gives a concrete inconsistency the reasoner would catch — and it actually contradicts (uses disjointness/cardinality, not bare domain/range under OWA).", maxScore: 25 },
+      { id: "owa", description: "Correctly states what the open-world + no-unique-names assumptions mean for the example (missing ≠ false; two names ≠ distinct).", maxScore: 15 },
     ],
   },
   "rub-pipeline": {
@@ -61,6 +72,31 @@ export const ASSESSMENTS: AssessmentTask[] = [
     openEnded: { prompt: "For your chosen domain: (1) list a few entities and relations and write 3–4 triples; (2) give a tiny TBox (a class, a subclass, a typed property); (3) name one fact a reasoner would *entail* (not stored); (4) say whether you'd use RDF or a property graph, and why.", rubricId: "rub-model" },
     requiredConcepts: ["triple", "ontology", "subclass", "entailment"],
     fatalMisconceptions: [M.dataMeaning, M.closedWorld, M.pgReasons],
+    passThreshold: 0.8,
+  }),
+  T({
+    id: "cap-reason",
+    nodeId: "a-reason",
+    kind: "hybrid",
+    title: "Reason over your brain",
+    prompt: "Show the symbolic side doing real work: express general rules and let the reasoner derive and check.",
+    deterministic: [
+      {
+        id: "reason-q1", type: "classification",
+        prompt: "Sort each statement into derived (the reasoner entails it) or asserted (you stated it).",
+        buckets: ["Derived (entailed)", "Asserted (given)"],
+        items: [
+          { id: "a", label: "`Ada a Person` from `Ada a Researcher` + `Researcher ⊑ Person`", correctBucket: "Derived (entailed)" },
+          { id: "b", label: "`Researcher ⊑ Person`", correctBucket: "Asserted (given)" },
+          { id: "c", label: "`Ada hasGrandparent Cy` from `hasParent ∘ hasParent ⊑ hasGrandparent`", correctBucket: "Derived (entailed)" },
+          { id: "d", label: "`Person owl:disjointWith Note`", correctBucket: "Asserted (given)" },
+        ],
+        explanation: "Axioms and base facts are asserted; what follows from them via the reasoner is derived (entailed).",
+      },
+    ],
+    openEnded: { prompt: "For a small domain: (1) write a few axioms including a disjointness and one of {property chain, transitive/inverse property, defined class}; (2) name one fact the reasoner *entails*; (3) give one inconsistency it would *catch* (make sure it really contradicts — disjointness/cardinality, not bare domain/range); (4) state what open-world + no-unique-names mean here.", rubricId: "rub-reason" },
+    requiredConcepts: ["entailment", "disjointness", "consistency", "open-world-assumption"],
+    fatalMisconceptions: [M.owaContradiction, M.objectIdentity],
     passThreshold: 0.8,
   }),
   T({

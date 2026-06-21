@@ -34,7 +34,8 @@ const NODES: SkillNode[] = [
   concept("c-neural", "neural", "sb-neural", "The Neural Side & Identity", "Embeddings, LLM extraction, entity resolution.", { x: 360, y: 320 }),
   concept("c-neurosymbolic", "neurosymbolic", "sb-neurosymbolic", "Neurosymbolic: Propose & Verify", "Neural proposes, symbolic verifies.", { x: 760, y: 300 }),
 
-  achievement("a-model", "second-brain", "Model a Domain", "Design a small KG + ontology of your own.", ["cap-model"], { x: 360, y: 540 }),
+  achievement("a-model", "second-brain", "Model a Domain", "Design a small KG + ontology of your own.", ["cap-model"], { x: 220, y: 540 }),
+  achievement("a-reason", "reasoning", "Reason Over Your Brain", "Use disjointness, property chains, and classification.", ["cap-reason"], { x: 640, y: 540 }),
   achievement("a-pipeline", "second-brain", "Design a Propose→Verify Brain", "Spec a neurosymbolic second brain.", ["cap-pipeline"], { x: 1040, y: 300 }),
 ];
 
@@ -56,6 +57,8 @@ const CONCEPT_PREREQS: [string, string][] = transitiveReduction(
 const ACHIEVEMENT_PREREQS: [string, string][] = [
   ["c-kg", "a-model"],
   ["c-onto", "a-model"],
+  ["c-onto", "a-reason"],
+  ["c-reasoning", "a-reason"],
   ["c-reasoning", "a-pipeline"],
   ["c-neural", "a-pipeline"],
   ["c-neurosymbolic", "a-pipeline"],
