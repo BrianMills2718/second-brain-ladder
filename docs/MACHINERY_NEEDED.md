@@ -383,6 +383,17 @@ Concrete friction, in the order it bit:
     more justified: **the metric must live in code with a pinned convention**, never
     in prose. (All corrected above.)
 
+13. **Fixing a known content bug introduced a *new* content bug — only an
+    adversarial re-audit caught it (R10, sharpened).** Correcting the OWA
+    `consistency` example, I wrote "entails `note_1 a Person` from `wrote:
+    Person→Note`" — still wrong, because in the running cast `note_1` is the
+    *object* of `wrote`, so the domain axiom types the *subject*. `npm run check`
+    passed it (green tsc + validator + build); an independent domain-expert subagent
+    caught it. So R10 isn't a one-time pass: **content correctness needs a standing
+    gate, because even bug-*fixes* by a careful author regress**, and no structural
+    check sees it. This is the strongest evidence in this doc that R10 must be
+    automated, not left to review discipline.
+
 **Bottom line.** The hand-expansion produced a genuinely non-linear, convergent
 graph — three branches converging on `neurosymbolic`; the most-depended-upon
 concepts are `entity` (9 dependants), `triple` (6), and `class`/`ontology`/
