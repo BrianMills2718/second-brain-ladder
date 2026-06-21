@@ -262,26 +262,29 @@ machinery must drive a page to. "Reliably generate full pages" means: emit, then
 gate against every row, then revise until green (R5 is the loop; this is its exit
 condition). Status = what exists today vs what this doc asks to be built.
 
-| # | Gate (a page is done only if…) | Req | Status today |
+| # | Gate (a page is done only if…) | Req | Status (after the 2026-06-21 build) |
 |---|--------------------------------|-----|--------------|
-| 1 | concept graph acyclic, `@c{}`-closed, every edge has `why`+`kind`, contrasts symmetric | (validator) | ✅ exists |
-| 2 | stage banding coherent (prereq stage ≤ concept stage); no **prose** forward-refs | R12 | ⚠️ chip-only; prose gap |
-| 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ❌ not built |
-| 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ❌ not built |
-| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ❌ not built |
-| 6 | prerequisite lists minimal; kinds correct; layers consistent; no near-dups | R12 | ❌ not built |
-| 7 | every concept term ⇒ glossary entry (and back) | R4 | ❌ not built |
-| 8 | every stage has a full lesson (≥3 quiz, ≥2 confusions, ≥1 viz, mastery) | R2 | ✅ enforced (but couples — see R2) |
-| 9 | every declared goal ⇒ achievement + capstone; required-concepts = goal closure; no goal/sink drift | R9/R12 | ⚠️ manual; drift only warns |
-| 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ❌ manual |
-| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ⚠️ harness fixed, coverage+checks gap |
-| 12 | a frozen degenerate fixture still FAILS the richness gate (regression) | R1/R12 | ❌ fixture gone |
-| 13 | every concept band/track-tagged; each band is a closed sub-curriculum; goal×depth view renders that band's closure | **R13** | ⚠️ goal-closure seed exists; bands not built |
+| 1 | concept graph acyclic, `@c{}`-closed, every edge has `why`+`kind`, contrasts symmetric | (validator) | ✅ enforced |
+| 2 | stage banding coherent (prereq stage ≤ concept stage); no **prose** forward-refs | R12 | ✅ **BUILT** — `proseForwardRefs` lint (advisory) + `axiom` re-staged; chip+prose both checked |
+| 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ✅ **BUILT** — `richnessGate` FAILs degenerate graphs; thresholds in `gates.mjs` |
+| 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ⚠️ contract written (`DOMAIN_COVERAGE.md`); per-Tier-A automated gate not yet built |
+| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ✅ **BUILT** — `check-content-correctness.mjs` LLM OWL-trap eval, calibrated on the 3 historical defects; FAIL-on-wrong / WARN-on-misleading |
+| 6 | prerequisite lists minimal; kinds correct; layers consistent; no near-dups | R12 | ◑ lints exist in `gates.mjs`; minimality/layer intentionally not emitted (false-positive-heavy for a direct-dependency model) |
+| 7 | every concept term ⇒ glossary entry (and back) | R4 | ✅ **BUILT** — glossary derived from concepts + `glossaryCoverage` gate |
+| 8 | every stage has a full lesson (≥3 quiz, ≥2 confusions, ≥1 viz, mastery) | R2 | ✅ enforced; concept panel now band-grouped so it scales with depth |
+| 9 | every declared goal ⇒ achievement + capstone; required-concepts = goal closure; no goal/sink drift | R9/R12 | ◑ achievements added (incl. a-reason); drift is an advisory gate |
+| 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ❌ still manual (graph.ts nodes/positions hand-authored) |
+| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ◑ harness covers all routes + grid layout + depth selector; automated layout-sanity assertion not yet a gate (manual visual pass done) |
+| 12 | a frozen degenerate fixture still FAILS the richness gate (regression) | R1/R12 | ✅ **BUILT** — `fixtures/thin-graph.mjs` + `test-gates.mjs` in `npm run check` |
+| 13 | every concept band/track-tagged; each band is a closed sub-curriculum; goal×depth view renders that band's closure | **R13** | ✅ **BUILT** — `Concept.band`, `bandClosureGate` (FAIL), effective-band propagation, depth selector in the concepts view |
 
-Rows 5 and 11 are the two that bit *this* session despite everything else being
-green; rows 3, 4, 5, 11, 12 are the ones with no automation at all. Row 13 is the
-new go-deep/selectable-depth axis — its seed (goal closure + core/enrichment) exists
-but needs generalizing to N bands.
+**Built this session (8 of 13 rows now green):** rows 1,2,3,5,7,8,12,13. The deterministic
+gates (R1/R4/R12/R13) live in `scripts/gates.mjs` + `scripts/validate-content.mjs`
+(in `npm run check`); the content-correctness eval (R10) is `npm run check-content`
+(needs an API key). **Still open:** row 4 (automated domain-coverage gate), row 6
+(minimality/layer — deliberately advisory), row 9 (derive achievements from goals),
+row 10 (derive skill-graph wiring), row 11 (automated layout-sanity assertion). These
+are the remaining machinery for the other agent / a future pass.
 
 ---
 

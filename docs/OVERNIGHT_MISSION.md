@@ -46,3 +46,18 @@ them force the content to high quality.
 
 ## Progress log (append; newest last)
 - 2026-06-21: mission set; tasks created. Starting Phase 1 (gates).
+- 2026-06-21: Phase 1 done — gates built. richness (R1) + thin-graph regression,
+  structural lints (R12), per-band closure (R13), glossary coverage (R4); all wired
+  into `npm run check`. Fixed the real lint hits (axiom re-staged to sb-onto).
+- 2026-06-21: R10 eval built + proven — `check-content-correctness.mjs` flags the 3
+  historical defects with correct trap class, passes corrected concepts (live,
+  gpt-5-mini, 0 mismatch). Ran `--all`: 0 wrong, 8 advisory "misleading"; tightened
+  reasoner/rule/shacl wording. Policy: FAIL-on-wrong, WARN-on-misleading.
+- 2026-06-21: Content — querying branch (query/BGP/SPARQL/Cypher/property-path) and
+  modeling-depth (n-ary/reification/named-graph/temporal + object/datatype property).
+  60 concepts. Lessons extended; concept panel band-grouped (R2). a-reason achievement
+  + cap-reason assessment (R9). Visual pass green at 60 nodes (grid + depth selector
+  keep it legible; band-grouped panel replaces the 18-item dump).
+- 2026-06-21: 8/13 Definition-of-Done rows now green (the deterministic gates + R10
+  eval + bands). Remaining: domain-coverage gate (R6 auto), derived wiring (R8/R9),
+  layout-sanity assertion (R11). All committed + pushed; deploy verified.
