@@ -15,17 +15,15 @@ const BASE = process.env.BASE || "http://localhost:5173";
 const OUT = join(process.cwd(), "scripts", "shots");
 mkdirSync(OUT, { recursive: true });
 
-// [route, name, optional expand-the-panels?]
+// [route, name, optional expand-the-panels?] — routes are #/node/<id> (App.tsx)
 const SHOTS = [
-  ["", "home-skilltree", false],      // skill-tree edge routing + labels
-  ["stage-1", "stage1-concepts", true], // concept panel (ADR-0002) + chips
-  ["stage-2", "stage2-graph", false], // typed-graph edge routing fix
-  ["stage-3", "stage3-defs", true],   // inline chips + notation rollup
-  ["stage-6", "stage6-table", false], // markdown pipe table
-  ["stage-11", "stage11-lists", false], // bullet lists
-  ["stage-0", "stage0-table", false], // comparison-table viz
-  ["stage-12", "stage12-encoder", false], // coding encoder
-  ["stage-14", "stage14-loop", false], // godel loop
+  ["", "home-skilltree", false],            // skill-tree edge routing + labels (now non-linear)
+  ["node/c-orientation", "stage0-orientation", false],
+  ["node/c-kg", "stage1-kg", true],         // concept panel (ADR-0002) + chips
+  ["node/c-onto", "stage2-onto", true],     // TBox/ABox typed-graph
+  ["node/c-reasoning", "stage3-reasoning", true], // entailment viz + turtle code block
+  ["node/c-neural", "stage4-neural", true], // entity resolution viz + code block
+  ["node/c-neurosymbolic", "stage5-neurosymbolic", true], // propose→verify loop + code block
 ];
 
 const browser = await puppeteer.launch({
@@ -43,7 +41,10 @@ await page.setViewport({ width: 1100, height: 1400, deviceScaleFactor: 1 });
 
 for (const [route, name, expand] of SHOTS) {
   try {
+    // Hash-only navigation does not reload an SPA, so puppeteer's goto would
+    // resolve on the *previous* render. Force a fresh boot: set the hash, reload.
     await page.goto(`${BASE}/#/${route}`, { waitUntil: "domcontentloaded", timeout: 15000 });
+    await page.reload({ waitUntil: "domcontentloaded", timeout: 15000 }); // networkidle0 hangs on WSL
     await new Promise((r) => setTimeout(r, 1500)); // let KaTeX/React Flow settle
 
     if (expand) {
@@ -67,5 +68,8 @@ for (const [route, name, expand] of SHOTS) {
   }
 }
 
-await browser.close();
+// browser.close() can hang on WSL after the last screenshot is already written;
+// race it against a timeout and hard-exit so the visual pass always terminates.
+await Promise.race([browser.close(), new Promise((r) => setTimeout(r, 4000))]);
 console.log("done");
+process.exit(0);

@@ -1,22 +1,25 @@
 /**
- * The ordered lesson list. UPCOMING shows the not-yet-authored topics greyed in
- * the sidebar so the learner sees where the ladder is heading.
+ * The ordered lesson list. UPCOMING shows the not-yet-authored topics greyed.
  */
 import type { Lesson } from "../../types";
 import { sbOrientation } from "./sb-orientation";
 import { sbKg } from "./sb-kg";
 import { sbOnto } from "./sb-onto";
+import { sbReasoning } from "./sb-reasoning";
+import { sbNeural } from "./sb-neural";
+import { sbNeurosymbolic } from "./sb-neurosymbolic";
 
-export const LESSONS: Lesson[] = [sbOrientation, sbKg, sbOnto];
+export const LESSONS: Lesson[] = [
+  sbOrientation,
+  sbKg,
+  sbOnto,
+  sbReasoning,
+  sbNeural,
+  sbNeurosymbolic,
+];
 
-/** Not-yet-authored topics, shown greyed in the sidebar. */
 export const UPCOMING: { stage: number; title: string }[] = [
-  { stage: 3, title: "Just-Enough Logic (FOL → Description Logic)" },
-  { stage: 4, title: "Reasoning & the Open World" },
-  { stage: 5, title: "Identity & Entity Resolution" },
-  { stage: 6, title: "The Neural Side (Embeddings, LLM Extraction)" },
-  { stage: 7, title: "Neurosymbolic: Propose & Verify" },
-  { stage: 8, title: "Capstone: Design Your Second Brain" },
+  { stage: 6, title: "Capstone: Design Your Second Brain" },
 ];
 
 export function lessonById(id: string): Lesson | undefined {

@@ -26,8 +26,20 @@ export function conceptDepEdges(): Array<[string, string]> {
 // declared terminal goal; otherwise it is "enrichment" — valuable context that
 // is off the critical path to the goals (not a defect; see EDGE_REVIEW / §9).
 
-/** The topic's declared terminal goals (the headline capabilities). */
-export const GOAL_CONCEPTS = ["ontology", "property-graph", "rdf-graph", "instance"];
+/** The topic's declared terminal goals (the headline capabilities) — building a
+ *  neurosymbolic second brain: propose→verify, resolve identity, stay consistent. */
+export const GOAL_CONCEPTS = [
+  "propose-verify",
+  "entity-resolution",
+  "ontology-grounded-extraction",
+  "shacl-validation",
+  "provenance",
+  "consistency",
+  "open-world-assumption",
+  "kg-embedding",
+  "property-graph",
+  "rdf-graph",
+];
 
 /** All concepts on the backward prerequisite closure of `goals` (incl. goals). */
 export function goalClosure(goals: string[] = GOAL_CONCEPTS): Set<string> {

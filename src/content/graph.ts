@@ -27,11 +27,15 @@ const achievement = (
 ): SkillNode => ({ id, kind: "achievement", branch, title, shortDescription, assessmentIds, position });
 
 const NODES: SkillNode[] = [
-  concept("c-orientation", "foundations", "sb-orientation", "Build a Second Brain", "A 2-min overview you can skip and return to.", { x: 280, y: -150 }),
-  concept("c-kg", "knowledge-graphs", "sb-kg", "Knowledge Graphs", "Entities, relations, triples; RDF vs property graphs.", { x: 80, y: 100 }),
-  concept("c-onto", "ontologies", "sb-onto", "Ontologies", "Classes, subclass, properties; TBox vs ABox.", { x: 360, y: 100 }),
+  concept("c-orientation", "foundations", "sb-orientation", "Build a Second Brain", "A 2-min overview you can skip and return to.", { x: 320, y: -160 }),
+  concept("c-kg", "knowledge-graphs", "sb-kg", "Knowledge Graphs", "Entities, relations, triples; RDF vs property graphs.", { x: 80, y: 80 }),
+  concept("c-onto", "ontologies", "sb-onto", "Ontologies", "Classes, subclass, properties; TBox vs ABox.", { x: 360, y: 80 }),
+  concept("c-reasoning", "reasoning", "sb-reasoning", "Meaning & Reasoning", "Entailment, reasoners, the open-world gotcha.", { x: 640, y: 40 }),
+  concept("c-neural", "neural", "sb-neural", "The Neural Side & Identity", "Embeddings, LLM extraction, entity resolution.", { x: 360, y: 320 }),
+  concept("c-neurosymbolic", "neurosymbolic", "sb-neurosymbolic", "Neurosymbolic: Propose & Verify", "Neural proposes, symbolic verifies.", { x: 760, y: 300 }),
 
-  achievement("a-model", "second-brain", "Model a Domain", "Design a small KG + ontology of your own.", ["cap-model"], { x: 640, y: 100 }),
+  achievement("a-model", "second-brain", "Model a Domain", "Design a small KG + ontology of your own.", ["cap-model"], { x: 360, y: 540 }),
+  achievement("a-pipeline", "second-brain", "Design a Propose→Verify Brain", "Spec a neurosymbolic second brain.", ["cap-pipeline"], { x: 1040, y: 300 }),
 ];
 
 const STAGE_TO_NODE: Record<string, string> = {};
@@ -52,6 +56,9 @@ const CONCEPT_PREREQS: [string, string][] = transitiveReduction(
 const ACHIEVEMENT_PREREQS: [string, string][] = [
   ["c-kg", "a-model"],
   ["c-onto", "a-model"],
+  ["c-reasoning", "a-pipeline"],
+  ["c-neural", "a-pipeline"],
+  ["c-neurosymbolic", "a-pipeline"],
 ];
 
 const PREREQS: [string, string][] = [...CONCEPT_PREREQS, ...ACHIEVEMENT_PREREQS];
@@ -66,7 +73,7 @@ const EDGES: SkillEdge[] = [
 
 export const SKILL_GRAPH: SkillGraph = { nodes: NODES, edges: EDGES };
 
-export const ROOT_GOAL_ID = "a-model";
+export const ROOT_GOAL_ID = "a-pipeline";
 
 export function nodeById(id: string): SkillNode | undefined {
   return SKILL_GRAPH.nodes.find((n) => n.id === id);
