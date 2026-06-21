@@ -266,21 +266,28 @@ condition). Status = what exists today vs what this doc asks to be built.
 |---|--------------------------------|-----|--------------|
 | 1 | concept graph acyclic, `@c{}`-closed, every edge has `why`+`kind`, contrasts symmetric | (validator) | ✅ enforced |
 | 2 | stage banding coherent (prereq stage ≤ concept stage); no **prose** forward-refs | R12 | ✅ **BUILT** — `proseForwardRefs` lint (advisory) + `axiom` re-staged; chip+prose both checked |
-| 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ✅ **BUILT** — `richnessGate` FAILs degenerate graphs; thresholds in `gates.mjs` |
+| 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ◑ **tripwire, not enforcement** — `richnessGate` FAILs the thin fixture, but real-graph margins are 4–5× so it never fires on incremental edits; a floor against catastrophic regression, not a quality lever |
 | 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ✅ **BUILT** — `coverage.ts` (REQUIRED + DEFERRED) + R6 gate; FAIL on a missing Tier-A idea |
-| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ✅ **BUILT** — `check-content-correctness.mjs` LLM OWL-trap eval, calibrated on the 3 historical defects; FAIL-on-wrong / WARN-on-misleading |
+| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ◑ **strong tool, NOT a CI gate** — `check-content-correctness.mjs` is calibrated (frozen mode is the regression gate) and `--all` now judges *all* concepts with self-consistency, but it needs an API key so it is **not in `npm run check`**; correctness is enforced only when someone runs `npm run check-content`, not on every commit |
 | 6 | prerequisite lists minimal; kinds correct; layers consistent; no near-dups | R12 | ◑ lints exist in `gates.mjs`; minimality/layer intentionally not emitted (false-positive-heavy for a direct-dependency model) |
 | 7 | every concept term ⇒ glossary entry (and back) | R4 | ✅ **BUILT** — glossary derived from concepts + `glossaryCoverage` gate |
 | 8 | every stage has a full lesson (≥3 quiz, ≥2 confusions, ≥1 viz, mastery) | R2 | ✅ enforced; concept panel now band-grouped so it scales with depth |
 | 9 | every declared goal ⇒ achievement + capstone; required-concepts = goal closure; no goal/sink drift | R9/R12 | ✅ **BUILT** — goal→achievement gate (every goal in some assessment's required-closure); drift advisory |
 | 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ◑ **stage↔node parity gate** (a stage can't silently lack a node); the curated 9-node skill-tree positions stay hand-authored by choice |
-| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ✅ **BUILT** — `layoutSanity` gate (stages horizontally separated) catches the collapse in CI without a browser; harness covers all routes |
+| 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ◑ `layoutSanity` catches the **collapse** in CI without a browser (the historical bug); it can't catch a valid-but-scrambled stage *order* (no ground truth beyond stageNum) — order is instead guaranteed by sharing one `lesson.stage` source. Harness covers all routes (manual eyeball). |
 | 12 | a frozen degenerate fixture still FAILS the richness gate (regression) | R1/R12 | ✅ **BUILT** — `fixtures/thin-graph.mjs` + `test-gates.mjs` in `npm run check` |
 | 13 | every concept band/track-tagged; each band is a closed sub-curriculum; goal×depth view renders that band's closure | **R13** | ✅ **BUILT** — `Concept.band`, `bandClosureGate` (FAIL), effective-band propagation, depth selector in the concepts view |
 
-**Built this session (12 of 13 rows green; 1 partial):** rows 1,2,3,4,5,7,8,9,11,12,13
-fully BUILT, row 10 partial (stage↔node parity gated; positions deliberately manual),
-row 6 deliberately advisory. The deterministic gates live in `scripts/gates.mjs` +
+**Honest tally (after the 2026-06-21 critical review):** genuinely-enforcing FAIL
+gates in `npm run check` = band-closure (R13), glossary-coverage (R4), layout-sanity
+(R11), domain-coverage (R6), goal→achievement (R9), stage↔node parity (R10), plus the
+pre-existing DAG/closure invariants. **Weaker than first claimed:** richness (row 3) is
+a degenerate-tripwire not a quality lever; content-correctness (row 5, the flagship) is
+a strong but *out-of-band* tool needing an API key, not a CI gate; the R12 lints are
+advisory (and `prereqMinimality`/`layerConsistency` are computed-then-discarded — dead
+code, kept for graphs where they apply). So the deterministic structural floor is
+solid and self-testing; the semantic-correctness layer is a review tool, not an
+enforced gate. That distinction is the main thing the "12/13 green" framing obscured. The deterministic gates live in `scripts/gates.mjs` +
 `scripts/conceptLayout.ts` + `scripts/validate-content.mjs` (all in `npm run check`,
 with `test-gates.mjs` proving each FAILs its degenerate fixture); the
 content-correctness eval (R10) is `npm run check-content` (needs an API key), proven on

@@ -55,5 +55,11 @@ export function layoutSanity(
     if (stagesHere.size > 1)
       fail.push(`layout-sanity: x=${x} mixes stages {${[...stagesHere].join(", ")}} — stages not horizontally separated (the collapse signature)`);
   }
+  // NOTE (limit, per the 2026-06-21 review): this catches a COLLAPSE / under-spread,
+  // not a valid-but-scrambled stage *order*. It can't — `stageNum` is the only
+  // ordering signal it has, so the x-order always agrees with it tautologically.
+  // Correct ordering is instead guaranteed structurally: the component and this gate
+  // both derive stageNum from the SAME lesson.stage, so they can't diverge the way the
+  // original regex-vs-lesson collapse did.
   return fail;
 }

@@ -104,25 +104,34 @@ async function loadConcepts() {
   return CONCEPT_GRAPH.concepts;
 }
 
-const CLAIMY = /entail|inconsist|consisten|classif|reject|deriv|contradict|violat|infer|vacuous|sameas|same individual|disjoint/i;
-
 if (!PROVIDERS.length) {
   console.error("R10 eval: no API key in env (OPENAI_API_KEY / OPENROUTER_API_KEY_2 / OPENROUTER_API_KEYS). The eval is built and runnable; set a key to run it.");
   process.exit(2);
 }
 
+// --all judges EVERY concept (no claim-bearing filter — that was a coverage hole that
+// skipped the semantic surface, incl. open-world-assumption itself). Costs more calls.
 const cases = ALL
-  ? (await loadConcepts())
-      .filter((c) => CLAIMY.test(`${c.short} ${c.example ?? ""}`))
-      .map((c) => ({ id: c.id, term: c.term, short: c.short, example: c.example, expect: null }))
+  ? (await loadConcepts()).map((c) => ({ id: c.id, term: c.term, short: c.short, example: c.example, expect: null }))
   : R10_CASES;
 
-console.log(`R10 eval: ${cases.length} ${ALL ? "claim-bearing concepts" : "frozen cases"} (providers: ${PROVIDERS.map((p) => p.name + "/" + p.model).join(", ")})\n`);
+console.log(`R10 eval: ${cases.length} ${ALL ? "concepts" : "frozen cases"} (providers: ${PROVIDERS.map((p) => p.name + "/" + p.model).join(", ")})\n`);
+
+// Self-consistency: the wrong/misleading boundary is unstable across runs, so a lone
+// "wrong" shouldn't break the build. Re-judge a "wrong" verdict; keep it only on a
+// 2-of-3 majority. (correct/flagged is stable; this only de-flakes the FAIL trigger.)
+async function judgeStable(c) {
+  const v = await judge(c);
+  if (v.verdict !== "wrong") return v;
+  const v2 = await judge(c), v3 = await judge(c);
+  const wrongs = [v, v2, v3].filter((x) => x.verdict === "wrong").length;
+  return wrongs >= 2 ? v : ([v, v2, v3].find((x) => x.verdict !== "wrong") ?? v);
+}
 
 let mismatches = 0, flagged = 0, errors = 0, wrong = 0;
 for (const c of cases) {
   let v;
-  try { v = await judge(c); }
+  try { v = await judgeStable(c); }
   catch (e) { console.log(`  ERROR ${c.id}: ${e.message}`); errors++; continue; }
   const isCorrect = v.verdict === "correct";
   if (!isCorrect) flagged++;

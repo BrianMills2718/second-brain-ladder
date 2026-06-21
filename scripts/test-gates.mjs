@@ -49,6 +49,8 @@ expect(bandClosureGate(seeded).length > 0, "band-closure did NOT fire on a found
 const realStageNum = (id) => ({ "sb-orientation": 0, "sb-kg": 1, "sb-onto": 2, "sb-reasoning": 3, "sb-neural": 4, "sb-neurosymbolic": 5 })[id] ?? 0;
 expect(layoutSanity(CONCEPT_GRAPH.concepts, realStageNum).length === 0, `layout-sanity FAILED the real graph: ${layoutSanity(CONCEPT_GRAPH.concepts, realStageNum).join("; ")}`);
 expect(layoutSanity(CONCEPT_GRAPH.concepts, () => 0).length > 0, "layout-sanity did NOT fire on the collapse (all concepts mapped to stage 0)");
+// (Note: layout-sanity catches a COLLAPSE, not a valid-but-scrambled order — it has no
+//  ground truth beyond stageNum; correct order is guaranteed by sharing lesson.stage.)
 
 // 4. Report (informational) the real graph's hub/hard stats.
 const { dependants, prereqs } = degrees(CONCEPT_GRAPH.concepts);

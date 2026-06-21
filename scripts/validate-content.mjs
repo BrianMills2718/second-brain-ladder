@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeFileSync, rmSync } from "node:fs";
 import { pathToFileURL } from "node:url";
-import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, prereqMinimality, goalSinkDrift, layerConsistency, glossaryCoverage } from "./gates.mjs";
+import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, goalSinkDrift, glossaryCoverage } from "./gates.mjs";
 
 const out = join(tmpdir(), `godel-content-${process.pid}.mjs`);
 
@@ -476,17 +476,14 @@ for (const f of layoutSanity(CONCEPT_GRAPH.concepts, (id) => stageOrder[id] ?? 0
   for (const id of REQUIRED_CONCEPTS) ok(ids.has(id), `coverage: required concept "${id}" missing (docs/DOMAIN_COVERAGE.md Tier-A)`);
   for (const d of DEFERRED_CONCEPTS) if (!ids.has(d.id)) warn(`coverage-deferred: ${d.id} — ${d.note}`);
 }
-// R12 — structural lints (advisory WARN). prose-forward-ref + contrast-staging +
-// goal/sink-drift are emitted. prereqMinimality and layerConsistency are computed in
-// gates.mjs but NOT emitted: in this model `prerequisites` are DIRECT conceptual
-// dependencies that legitimately overlap transitive ones (a triple depends directly
-// on both entity AND relation), and is-a edges legitimately cross abstraction layers
-// (a property-graph is-a knowledge-graph: system realizing data) — so those two lints
-// are almost all false-positive here. Kept available for graphs where they apply.
+// R12 — structural lints (advisory WARN). prereqMinimality + layerConsistency exist in
+// gates.mjs but are intentionally NOT used here: in this model `prerequisites` are
+// DIRECT conceptual dependencies that legitimately overlap transitive ones (a triple
+// depends directly on both entity AND relation), and is-a edges legitimately cross
+// abstraction layers — so those two are ~all false-positive for this graph.
 for (const w of proseForwardRefs(CONCEPT_GRAPH.concepts, stageNum)) warn(w);
 for (const w of contrastStaging(CONCEPT_GRAPH.concepts, stageNum)) warn(w);
 for (const w of goalSinkDrift(CONCEPT_GRAPH.concepts, GOAL_CONCEPTS)) warn(w);
-void prereqMinimality; void layerConsistency; // available, intentionally not emitted
 
 // Glossary uniqueness
 const gterms = new Set();
