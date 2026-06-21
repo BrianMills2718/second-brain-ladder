@@ -29,8 +29,8 @@ export const REQUIRED_CONCEPTS: string[] = [
 export const DEFERRED_CONCEPTS: { id: string; note: string }[] = [
   { id: "rdfs", note: "RDFS as a named standard (rdf-graph + subclass cover the substance)" },
   { id: "owl-profiles", note: "OWL 2 EL/QL/RL profiles (description-logic covers the family)" },
-  { id: "knowledge-fusion", note: "multi-source fusion / conflict resolution (construction branch)" },
-  { id: "link-prediction", note: "KG-ML link prediction / graph completion" },
-  { id: "kg-rag", note: "KG-grounded retrieval-augmented generation" },
-  { id: "ner-extraction", note: "decompose llm-extraction into NER / entity-linking / relation-extraction" },
+  { id: "gnn", note: "graph neural networks (message passing, R-GCN) — Frontier track" },
+  { id: "evaluation-metrics", note: "precision/recall/F1, MRR, Hits@K, calibration — eval module (UPCOMING)" },
+  { id: "reasoning-families", note: "Datalog, forward/backward chaining, non-monotonic — module (UPCOMING)" },
+  { id: "governance-fair", note: "FAIR, lineage, access control, epistemic status — module (UPCOMING)" },
 ];

@@ -13,6 +13,9 @@ import { sbReasoning } from "./sb-reasoning";
 import { sbExpressivity } from "./sb-expressivity";
 import { sbNeural } from "./sb-neural";
 import { sbNeurosymbolic } from "./sb-neurosymbolic";
+import { sbConstruction } from "./sb-construction";
+import { sbLlmKg } from "./sb-llm-kg";
+import { sbKgml } from "./sb-kgml";
 
 export const LESSONS: Lesson[] = [
   sbOrientation,
@@ -25,10 +28,14 @@ export const LESSONS: Lesson[] = [
   sbExpressivity,
   sbNeural,
   sbNeurosymbolic,
+  sbConstruction,
+  sbLlmKg,
+  sbKgml,
 ];
 
 export const UPCOMING: { stage: number; title: string }[] = [
-  { stage: 10, title: "Capstone: Design Your Second Brain" },
+  { stage: 13, title: "Evaluation & Governance (FAIR, metrics, epistemic status)" },
+  { stage: 14, title: "Reasoning families (Datalog, chaining, non-monotonic)" },
 ];
 
 export function lessonById(id: string): Lesson | undefined {
