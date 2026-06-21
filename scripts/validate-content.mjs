@@ -14,6 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeFileSync, rmSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import { richnessGate } from "./gates.mjs";
 
 const out = join(tmpdir(), `godel-content-${process.pid}.mjs`);
 
@@ -431,6 +432,11 @@ for (const l of LESSONS) {
   }
 }
 
+// --- machinery gates (docs/MACHINERY_NEEDED.md) ---
+const warnings = [];
+// R1 — structural richness (FAIL on a degenerate/chain-like graph).
+for (const f of richnessGate(CONCEPT_GRAPH.concepts)) ok(false, f);
+
 // Glossary uniqueness
 const gterms = new Set();
 for (const g of GLOSSARY) {
@@ -441,6 +447,10 @@ for (const g of GLOSSARY) {
 rmSync(out, { force: true });
 rmSync(stub, { force: true });
 
+if (warnings.length) {
+  console.warn(`⚠ ${warnings.length} advisory warning(s):`);
+  for (const w of warnings) console.warn("  ~ " + w);
+}
 if (errors.length) {
   console.error(`✗ content validation: ${errors.length} problem(s)`);
   for (const e of errors) console.error("  - " + e);
