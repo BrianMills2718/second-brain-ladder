@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -15,11 +17,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Enforce ALL the gates (tsc + test-gates + content validator + build), not just the
+  # build — otherwise the machinery (richness, band-closure, coverage, layout-sanity,
+  # goal→achievement, stage↔node parity, glossary) never actually runs in CI.
   build:
     runs-on: ubuntu-latest
     env:
-      # The frontend builds without Chromium; puppeteer is a local-only dev tool.
-      PUPPETEER_SKIP_DOWNLOAD: "true"
+      PUPPETEER_SKIP_DOWNLOAD: "true" # the frontend builds without Chromium
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -27,13 +31,32 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: npm run check # tsc --noEmit && test-gates && validate-content && vite build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
+  # Semantic content-correctness gate (R10 OWL-trap eval, frozen calibration set).
+  # Runs only when an API key secret is present; skips green otherwise. Does not block
+  # deploy (it's an LLM judge) but fails visibly on a calibration-set regression.
+  content-correctness:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run check-content
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_API_KEYS: ${{ secrets.OPENROUTER_API_KEYS }}
+
   deploy:
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     environment:

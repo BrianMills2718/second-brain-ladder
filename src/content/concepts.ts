@@ -258,7 +258,7 @@ const CONCEPTS: Concept[] = [
     example: "`:Ada owl:sameAs wd:Q7259 .`",
     prerequisites: ["identifier", "entity"], contrasts: ["subclass"], introducedIn: "sb-neural" },
   { id: "entity-resolution", term: "entity resolution", layer: "system",
-    short: "Deciding when two records are the same @c{entity} — combining exact @c{sameas} links with fuzzy @c{similarity}.",
+    short: "Deciding when two records are the same @c{entity} — a heuristic that *proposes* @c{sameas} links from exact keys + fuzzy @c{similarity} (fuzzy match has no logical semantics on its own).",
     example: "Merging `Ada Lovelace` and `A. Lovelace` into one node.",
     prerequisites: ["entity", "sameas", "similarity"], introducedIn: "sb-neural" },
 
