@@ -36,7 +36,6 @@ export const GOAL_CONCEPTS = [
   "provenance",
   "consistency",
   "open-world-assumption",
-  "kg-embedding",
   "property-graph",
   "rdf-graph",
 ];

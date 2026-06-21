@@ -450,6 +450,19 @@ for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 for (const f of glossaryCoverage(CONCEPT_GRAPH.concepts, glossarySlugs)) ok(false, f);
 // R11 — layout-sanity (FAIL: the concept graph would render collapsed/under-spread).
 for (const f of layoutSanity(CONCEPT_GRAPH.concepts, (id) => stageOrder[id] ?? 0)) ok(false, f);
+// R9 — goal→achievement alignment (FAIL: a declared goal no capstone assesses).
+{
+  const byId = Object.fromEntries(CONCEPT_GRAPH.concepts.map((c) => [c.id, c]));
+  const req = new Set();
+  for (const a of Object.values(ASSESSMENT_BY_ID)) for (const id of a.requiredConcepts ?? []) req.add(id);
+  // close downward over prerequisites (a required concept implies its prereqs are taught)
+  const covered = new Set(req);
+  const st = [...req];
+  while (st.length) { const u = st.pop(); for (const p of byId[u]?.prerequisites ?? []) if (!covered.has(p)) { covered.add(p); st.push(p); } }
+  for (const g of GOAL_CONCEPTS)
+    ok(covered.has(g), `goal-achievement: goal "${g}" is not assessed by any achievement (add it to an assessment's requiredConcepts, or drop it from GOAL_CONCEPTS)`);
+}
+
 // R6 — domain coverage (FAIL: a required Tier-A key idea is missing; WARN on deferred).
 {
   const ids = new Set(CONCEPT_GRAPH.concepts.map((c) => c.id));
