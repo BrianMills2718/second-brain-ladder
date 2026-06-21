@@ -20,6 +20,7 @@ import "reactflow/dist/style.css";
 import { CONCEPT_GRAPH, CONCEPT_BY_ID, conceptTopoOrder, prereqWhy, prereqKindOf, PREREQ_KINDS, type PrereqKind } from "../content/concepts";
 import { conceptSCCs, goalClosure } from "../content/derive";
 import { LESSONS } from "../content/lessons";
+import { conceptPositions } from "../content/conceptLayout";
 
 /** Color per prerequisite kind (ADR-0005), used for the edge + the legend. */
 const KIND_COLOR: Record<PrereqKind, string> = {
@@ -40,36 +41,11 @@ import { RichLine } from "./Math";
 const STAGE_INDEX: Record<string, number> = Object.fromEntries(
   LESSONS.map((l) => [l.id, l.stage]),
 );
-const stageNum = (id: string): number =>
-  STAGE_INDEX[CONCEPT_BY_ID[id]?.introducedIn ?? ""] ?? 0;
 
-/** Layout by curriculum stage, wrapping deep stages into a grid. x advances per
- *  stage (spaced by how many sub-columns that stage needs); within a stage, concepts
- *  fill top-to-bottom in dependency order, then wrap to the next sub-column once a
- *  stage exceeds ROWS. A single tall column for an 18-concept stage was illegible
- *  (the stage-column layout didn't scale with depth); the grid keeps every stage
- *  compact and stages cleanly separated. */
-const ROWS = 9;
-const COLW = 178;
-const ROWH = 86;
-const STAGE_GAP = 56;
-function layout(): Record<string, { x: number; y: number }> {
-  const rank: Record<string, number> = {};
-  conceptTopoOrder().forEach((id, i) => (rank[id] = i));
-  const byStage: Record<number, string[]> = {};
-  for (const c of CONCEPT_GRAPH.concepts) (byStage[stageNum(c.id)] ??= []).push(c.id);
-  const pos: Record<string, { x: number; y: number }> = {};
-  let x0 = 20;
-  for (const k of Object.keys(byStage).map(Number).sort((a, b) => a - b)) {
-    const ids = byStage[k].sort((a, b) => rank[a] - rank[b]);
-    const cols = Math.max(1, Math.ceil(ids.length / ROWS));
-    ids.forEach((id, i) => {
-      pos[id] = { x: x0 + Math.floor(i / ROWS) * COLW, y: 20 + (i % ROWS) * ROWH };
-    });
-    x0 += cols * COLW + STAGE_GAP;
-  }
-  return pos;
-}
+// Layout is the shared pure module (src/content/conceptLayout.ts) so the rendered
+// view and the layout-sanity gate use one implementation.
+const layout = (): Record<string, { x: number; y: number }> =>
+  conceptPositions(CONCEPT_GRAPH.concepts, (id) => STAGE_INDEX[id ?? ""] ?? 0);
 
 const plain = (s: string) => s.replace(/@[cnt]\{([^}|]+)(?:\|[^}]+)?\}/g, "$1").replace(/\$/g, "");
 

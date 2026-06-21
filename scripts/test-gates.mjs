@@ -14,9 +14,10 @@ import { THIN_CONCEPTS } from "./fixtures/thin-graph.mjs";
 
 const out = join(tmpdir(), `sb-gates-test-${process.pid}.mjs`);
 const stub = join(tmpdir(), `sb-gates-stub-${process.pid}.ts`);
-writeFileSync(stub, `export { CONCEPT_GRAPH } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};`);
+writeFileSync(stub, `export { CONCEPT_GRAPH } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};
+   export { layoutSanity } from ${JSON.stringify(process.cwd() + "/src/content/conceptLayout.ts")};`);
 await build({ entryPoints: [stub], bundle: true, format: "esm", outfile: out, logLevel: "error" });
-const { CONCEPT_GRAPH } = await import(pathToFileURL(out).href);
+const { CONCEPT_GRAPH, layoutSanity } = await import(pathToFileURL(out).href);
 rmSync(out, { force: true });
 rmSync(stub, { force: true });
 
@@ -43,6 +44,11 @@ const seeded = [
   { id: "shallow", term: "shallow", layer: "logic", band: "foundations", introducedIn: "s1", prerequisites: ["deep"] },
 ];
 expect(bandClosureGate(seeded).length > 0, "band-closure did NOT fire on a foundations concept with a practitioner prerequisite");
+
+// 5. Layout sanity passes the real stage map and FIRES on the collapse (stageNum→0).
+const realStageNum = (id) => ({ "sb-orientation": 0, "sb-kg": 1, "sb-onto": 2, "sb-reasoning": 3, "sb-neural": 4, "sb-neurosymbolic": 5 })[id] ?? 0;
+expect(layoutSanity(CONCEPT_GRAPH.concepts, realStageNum).length === 0, `layout-sanity FAILED the real graph: ${layoutSanity(CONCEPT_GRAPH.concepts, realStageNum).join("; ")}`);
+expect(layoutSanity(CONCEPT_GRAPH.concepts, () => 0).length > 0, "layout-sanity did NOT fire on the collapse (all concepts mapped to stage 0)");
 
 // 4. Report (informational) the real graph's hub/hard stats.
 const { dependants, prereqs } = degrees(CONCEPT_GRAPH.concepts);

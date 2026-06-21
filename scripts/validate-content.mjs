@@ -29,7 +29,8 @@ writeFileSync(
    export { SKILL_GRAPH, ROOT_GOAL_ID } from ${JSON.stringify(process.cwd() + "/src/content/graph.ts")};
    export { ASSESSMENTS, ASSESSMENT_BY_ID, RUBRICS } from ${JSON.stringify(process.cwd() + "/src/content/assessments.ts")};
    export { CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS } from ${JSON.stringify(process.cwd() + "/src/content/concepts.ts")};
-   export { GOAL_CONCEPTS } from ${JSON.stringify(process.cwd() + "/src/content/derive.ts")};`,
+   export { GOAL_CONCEPTS } from ${JSON.stringify(process.cwd() + "/src/content/derive.ts")};
+   export { layoutSanity } from ${JSON.stringify(process.cwd() + "/src/content/conceptLayout.ts")};`,
 );
 await build({
   entryPoints: [stub],
@@ -39,7 +40,7 @@ await build({
   logLevel: "error",
 });
 
-const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS, GOAL_CONCEPTS } = await import(pathToFileURL(out).href);
+const { LESSONS, GLOSSARY, NOTATION, SKILL_GRAPH, ROOT_GOAL_ID, ASSESSMENT_BY_ID, RUBRICS, CONCEPT_GRAPH, PREREQ_WHY, PREREQ_KIND, PREREQ_KINDS, GOAL_CONCEPTS, layoutSanity } = await import(pathToFileURL(out).href);
 
 const errors = [];
 const ok = (cond, msg) => { if (!cond) errors.push(msg); };
@@ -446,6 +447,8 @@ for (const f of richnessGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 // R4 — glossary coverage (FAIL: a concept term with no glossary entry).
 for (const f of glossaryCoverage(CONCEPT_GRAPH.concepts, glossarySlugs)) ok(false, f);
+// R11 — layout-sanity (FAIL: the concept graph would render collapsed/under-spread).
+for (const f of layoutSanity(CONCEPT_GRAPH.concepts, (id) => stageOrder[id] ?? 0)) ok(false, f);
 // R12 — structural lints (advisory WARN). prose-forward-ref + contrast-staging +
 // goal/sink-drift are emitted. prereqMinimality and layerConsistency are computed in
 // gates.mjs but NOT emitted: in this model `prerequisites` are DIRECT conceptual
