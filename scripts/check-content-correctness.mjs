@@ -119,13 +119,14 @@ const cases = ALL
 
 console.log(`R10 eval: ${cases.length} ${ALL ? "claim-bearing concepts" : "frozen cases"} (providers: ${PROVIDERS.map((p) => p.name + "/" + p.model).join(", ")})\n`);
 
-let mismatches = 0, flagged = 0, errors = 0;
+let mismatches = 0, flagged = 0, errors = 0, wrong = 0;
 for (const c of cases) {
   let v;
   try { v = await judge(c); }
   catch (e) { console.log(`  ERROR ${c.id}: ${e.message}`); errors++; continue; }
   const isCorrect = v.verdict === "correct";
   if (!isCorrect) flagged++;
+  if (v.verdict === "wrong") wrong++;
   const tag = isCorrect ? "ok " : "FLAG";
   let label = "";
   if (c.expect) {
@@ -138,9 +139,17 @@ for (const c of cases) {
   if (!isCorrect) console.log(`         ${v.reasoning}${v.fix ? "\n         fix: " + v.fix : ""}`);
 }
 
-console.log(`\n${flagged} flagged / ${cases.length} (${errors} errors).`);
+console.log(`\n${flagged} flagged (${wrong} wrong / ${flagged - wrong} misleading) of ${cases.length} (${errors} errors).`);
 if (!ALL) {
+  // Frozen/calibration mode: regression gate on the labeled set.
   if (errors) { console.error("R10 frozen eval had call errors — cannot certify."); process.exit(2); }
   if (mismatches) { console.error(`✗ R10 eval: ${mismatches} label mismatch(es) — the judge mis-classified the calibration set.`); process.exit(1); }
   console.log("✓ R10 eval: flagged all historical defects, passed all corrected concepts.");
+} else {
+  // Full-content mode. Policy: FAIL on "wrong" (hard semantic errors); "misleading"
+  // is advisory (a strict judge flags defensible pedagogical simplifications, so a
+  // human reviews these rather than the build breaking). See MACHINERY_NEEDED R10.
+  if (errors) { console.error("R10 --all had call errors."); process.exit(2); }
+  if (wrong) { console.error(`✗ R10 --all: ${wrong} concept(s) judged WRONG — hard semantic errors to fix.`); process.exit(1); }
+  console.log(`✓ R10 --all: no hard errors. ${flagged} "misleading" flag(s) for human review (advisory).`);
 }
