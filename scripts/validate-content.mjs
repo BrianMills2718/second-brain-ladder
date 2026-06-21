@@ -450,6 +450,13 @@ for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 for (const f of glossaryCoverage(CONCEPT_GRAPH.concepts, glossarySlugs)) ok(false, f);
 // R11 — layout-sanity (FAIL: the concept graph would render collapsed/under-spread).
 for (const f of layoutSanity(CONCEPT_GRAPH.concepts, (id) => stageOrder[id] ?? 0)) ok(false, f);
+// R10/stage-parity — every lesson stage must have a skill-graph concept node, and
+// every concept node a real lesson (catches "add a stage, it silently doesn't appear").
+{
+  const nodeLessonIds = new Set(SKILL_GRAPH.nodes.filter((n) => n.lessonId).map((n) => n.lessonId));
+  for (const l of LESSONS) ok(nodeLessonIds.has(l.id), `stage-parity: lesson "${l.id}" has no skill-graph node — add a concept() node for it in graph.ts`);
+}
+
 // R9 — goal→achievement alignment (FAIL: a declared goal no capstone assesses).
 {
   const byId = Object.fromEntries(CONCEPT_GRAPH.concepts.map((c) => [c.id, c]));
