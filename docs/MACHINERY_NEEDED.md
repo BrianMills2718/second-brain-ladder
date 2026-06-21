@@ -268,7 +268,7 @@ condition). Status = what exists today vs what this doc asks to be built.
 | 2 | stage banding coherent (prereq stage ≤ concept stage); no **prose** forward-refs | R12 | ✅ **BUILT** — `proseForwardRefs` lint (advisory) + `axiom` re-staged; chip+prose both checked |
 | 3 | structural richness ≥ thresholds (hubs, hard-ideas, contrast density, depth/width) | R1 | ◑ **tripwire, not enforcement** — `richnessGate` FAILs the thin fixture, but real-graph margins are 4–5× so it never fires on incremental edits; a floor against catastrophic regression, not a quality lever |
 | 4 | concept set covers the domain's declared key ideas (faithfulness/coverage) | R6 | ✅ **BUILT** — `coverage.ts` (REQUIRED + DEFERRED) + R6 gate; FAIL on a missing Tier-A idea |
-| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ◑ **strong tool, NOT a CI gate** — `check-content-correctness.mjs` is calibrated (frozen mode is the regression gate) and `--all` now judges *all* concepts with self-consistency, but it needs an API key so it is **not in `npm run check`**; correctness is enforced only when someone runs `npm run check-content`, not on every commit |
+| 5 | **every definition & example is factually correct** vs authoritative sources | **R10** | ✅ **CI gate when a key secret is set** — `check-content-correctness.mjs` (frozen calibration, self-consistency, `--all` covers all 64) runs as a CI job (`.github/workflows/deploy.yml`); needs a repo secret `OPENAI_API_KEY` or `OPENROUTER_API_KEYS` (skips green without one — currently dormant until the secret is added). Local: `npm run check-content`. |
 | 6 | prerequisite lists minimal; kinds correct; layers consistent; no near-dups | R12 | ◑ lints exist in `gates.mjs`; minimality/layer intentionally not emitted (false-positive-heavy for a direct-dependency model) |
 | 7 | every concept term ⇒ glossary entry (and back) | R4 | ✅ **BUILT** — glossary derived from concepts + `glossaryCoverage` gate |
 | 8 | every stage has a full lesson (≥3 quiz, ≥2 confusions, ≥1 viz, mastery) | R2 | ✅ enforced; concept panel now band-grouped so it scales with depth |
@@ -287,7 +287,16 @@ a strong but *out-of-band* tool needing an API key, not a CI gate; the R12 lints
 advisory (and `prereqMinimality`/`layerConsistency` are computed-then-discarded — dead
 code, kept for graphs where they apply). So the deterministic structural floor is
 solid and self-testing; the semantic-correctness layer is a review tool, not an
-enforced gate. That distinction is the main thing the "12/13 green" framing obscured. The deterministic gates live in `scripts/gates.mjs` +
+enforced gate. That distinction is the main thing the "12/13 green" framing obscured.
+
+**Post-review hardening (same day):** the gates are now actually **enforced in CI** —
+the deploy workflow's build job runs `npm run check` (all gates), not just `npm run
+build`; a gate failure blocks deploy, and PRs are checked too. The R10 eval is wired
+as a CI job that runs the frozen calibration gate when a key secret is present (it
+currently **skips green** because no `OPENAI_API_KEY`/`OPENROUTER_API_KEYS` repo secret
+is set — adding one activates it). So the structural floor is enforced unconditionally;
+the semantic gate is enforced as soon as the secret exists. Before this, every gate was
+local-only — the single biggest gap the review surfaced. The deterministic gates live in `scripts/gates.mjs` +
 `scripts/conceptLayout.ts` + `scripts/validate-content.mjs` (all in `npm run check`,
 with `test-gates.mjs` proving each FAILs its degenerate fixture); the
 content-correctness eval (R10) is `npm run check-content` (needs an API key), proven on
