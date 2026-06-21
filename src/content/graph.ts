@@ -45,7 +45,7 @@ const conceptNodes: SkillNode[] = byStage.map((l, i) => ({
 // --- Achievement overlay (authored: assessment refs + prerequisite modules). ---
 const achievementDefs: { id: string; branch: Branch; title: string; short: string; assessmentIds: string[]; prereqs: string[] }[] = [
   { id: "a-model", branch: "second-brain", title: "Model a Domain", short: "Design a small KG + ontology of your own.", assessmentIds: ["cap-model"], prereqs: ["c-kg", "c-onto"] },
-  { id: "a-reason", branch: "reasoning", title: "Reason Over Your Brain", short: "Use disjointness, property chains, and classification.", assessmentIds: ["cap-reason"], prereqs: ["c-onto", "c-reasoning"] },
+  { id: "a-reason", branch: "reasoning", title: "Reason Over Your Brain", short: "Use disjointness, property chains, and classification.", assessmentIds: ["cap-reason"], prereqs: ["c-reasoning", "c-expressivity"] },
   { id: "a-pipeline", branch: "second-brain", title: "Design a Propose→Verify Brain", short: "Spec a neurosymbolic second brain.", assessmentIds: ["cap-pipeline"], prereqs: ["c-reasoning", "c-neural", "c-neurosymbolic"] },
 ];
 const posOf = (id: string): { x: number; y: number } | undefined => conceptNodes.find((n) => n.id === id)?.position;

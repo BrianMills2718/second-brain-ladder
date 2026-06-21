@@ -175,6 +175,20 @@ export function glossaryCoverage(concepts, glossarySlugs) {
   return fail;
 }
 
+/** R14 — module size. A page/module (`introducedIn`) must hold a digestible number of
+ *  concepts; a 17-concept page is a dump that must be split. Empty modules (orientation)
+ *  are exempt. Returns FAILs for over-max. */
+export const MODULE_SIZE = { max: 9 };
+export function moduleSizeGate(concepts, T = MODULE_SIZE) {
+  const byModule = {};
+  for (const c of concepts) (byModule[c.introducedIn] ??= []).push(c.id);
+  const fail = [];
+  for (const [m, ids] of Object.entries(byModule))
+    if (ids.length > T.max)
+      fail.push(`module-size: "${m}" has ${ids.length} concepts (max ${T.max}) — split into focused pages (R14, docs/PATH_DERIVATION.md)`);
+  return fail;
+}
+
 /** R12 — layer consistency (WARN): sibling concepts (one is-a/refines the other) in
  *  different layers. Heuristic: a concept and a prereq tagged kind is-a/refines. */
 export function layerConsistency(concepts, prereqKindOf) {

@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbNeurosymbolic: Lesson = {
   id: "sb-neurosymbolic",
-  stage: 5,
+  stage: 9,
   title: "Neurosymbolic: Propose & Verify",
   summary:
     "Put the two halves together: let the neural side propose (extract triples, find similar things) and the symbolic side verify (the ontology and reasoner check types, shapes, and consistency). That loop is how a second brain stays both general and trustworthy.",

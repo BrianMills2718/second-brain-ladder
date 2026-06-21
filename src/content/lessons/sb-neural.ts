@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbNeural: Lesson = {
   id: "sb-neural",
-  stage: 4,
+  stage: 8,
   title: "The Neural Side & Identity",
   summary:
     "Learned representations fill the gaps symbolic ones can't: embeddings give fuzzy similarity, LLMs extract triples from prose, and together they help decide when two records are the same entity. The price is no guarantees — neural output can be confidently wrong.",

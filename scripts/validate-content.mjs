@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeFileSync, rmSync } from "node:fs";
 import { pathToFileURL } from "node:url";
-import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, goalSinkDrift, glossaryCoverage } from "./gates.mjs";
+import { richnessGate, bandClosureGate, proseForwardRefs, contrastStaging, goalSinkDrift, glossaryCoverage, moduleSizeGate } from "./gates.mjs";
 
 const out = join(tmpdir(), `godel-content-${process.pid}.mjs`);
 
@@ -444,6 +444,8 @@ const prereqKindOf = (c, p) => PREREQ_KIND[`${c}>${p}`];
 
 // R1 — structural richness (FAIL on a degenerate/chain-like graph).
 for (const f of richnessGate(CONCEPT_GRAPH.concepts)) ok(false, f);
+// R14 — module size (FAIL on a page that holds too many concepts; forces a split).
+for (const f of moduleSizeGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 // R13 — per-band closure (FAIL: a concept shallower than a prerequisite).
 for (const f of bandClosureGate(CONCEPT_GRAPH.concepts)) ok(false, f);
 // R4 — glossary coverage (FAIL: a concept term with no glossary entry).

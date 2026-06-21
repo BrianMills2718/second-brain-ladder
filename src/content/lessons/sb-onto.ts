@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbOnto: Lesson = {
   id: "sb-onto",
-  stage: 2,
+  stage: 4,
   title: "Ontologies",
   summary:
     "A knowledge graph says what's connected; an ontology says what those connections mean. Classes, a subclass hierarchy, and typed properties — the schema (TBox) over your data (ABox) — are what let your second brain derive facts you never wrote down.",
@@ -64,16 +64,6 @@ A reasoner, using \`Researcher rdfs:subClassOf Person\`, **derives**:
 \`\`\`
 
 You looked up nothing; the ontology *entailed* it. The same domain/range rules let the reasoner *infer* a thing's type — and with a **disjointness** axiom, catch genuinely contradictory data. This — deriving and checking, not just storing — is the payoff of giving your second brain a schema.`,
-    },
-    {
-      heading: "An ontology is not a taxonomy (and don't reinvent it)",
-      body: `Three things often confused:
-
-- a **@c{taxonomy}** is *just* a broader/narrower hierarchy (\`Animal > Mammal > Dog\`);
-- a **@c{thesaurus}** adds related/synonym links (SKOS);
-- an **@c{ontology}** adds *logical axioms* (disjointness, restrictions, property rules) a reasoner can act on.
-
-Start from **@c{competency-question}s** — the questions your brain must answer ("which notes cite a paper Ada wrote?") — and let them drive the model. And prefer **@c{ontology-reuse}**: align to \`foaf:Person\`, \`schema.org\`, or an upper ontology (SUMO) instead of inventing terms, so your second brain interoperates with the wider world.`,
     },
   ],
   visualizations: [
