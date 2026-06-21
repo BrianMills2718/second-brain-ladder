@@ -153,6 +153,31 @@ semantically true"** (valid JSON can be false). Both are first-class verify step
 distinct from SHACL (shape) and the reasoner (consistency); see DOMAIN_COVERAGE.md
 "Governed construction & assertion lifecycle".
 
+**R10 is automatable — the failure distribution is a short, enumerable trap list.**
+Across three hand-authored deep slices this session (validation/consistency,
+property expressivity, classification/restrictions), **every single content defect
+was the same species**: an open-world / no-unique-names / inference-vs-validation
+trap — i.e. the exact category errors the curriculum exists to prevent — and **all
+passed tsc + validator + build**. A capable author with the specs open reproduced
+them anyway. So the R10 gate does **not** need open-ended "get an expert"; it needs a
+frozen adversarial probe for a small checklist:
+
+| Trap | The mistake | Caught instance this session |
+|---|---|---|
+| **OWA-as-CWA** | "asserting X is *inconsistent*" when under OWA it's merely not-entailed or merely inferred | `consistency` example — domain axiom on `note_1` (object position) does not type it `Person` |
+| **No-unique-names** | "two different values ⇒ inconsistent" — true for distinct literals, false for object individuals (inferred `sameAs`) | `functional-property` |
+| **Inference vs validation** | attributing *rejection* to the reasoner (it entails / flags inconsistency; SHACL rejects) | "the reasoner rejects ill-typed triples" |
+| **Vacuous-truth ≠ OWA** | tying empty-set universal truth to OWA when it's plain FOL quantifier semantics | `universal-restriction` |
+| **Axiom direction** | `⊑` orientation; domain types the *subject*, range the *object*; chain order | the `note_1` subject/object slip inside the OWA case |
+
+**The automatable check:** for any concept/example asserting a semantic outcome
+(*entails / inconsistent / classified / rejected*), an LLM probe must **trace the
+entailments under OWA + no-UNA and confirm the claimed outcome actually follows**,
+explicitly testing the rows above. That is a frozen-prompt eval (prompt_eval, a
+golden case set), not a human review — cheap, repeatable, and gating. The fact that
+the defects cluster into ~5 named traps is the headline machinery result: **R10 is a
+targeted checklist, not an open-ended audit.**
+
 ## R11. Rendered-artifact fidelity — the page must *show* the richness, not just hold it
 A correct, rich graph can still **render** as a linear chain. It did: the
 `#/concepts` view laid every concept in one `x=20` column because the layout read
@@ -393,6 +418,18 @@ Concrete friction, in the order it bit:
     gate, because even bug-*fixes* by a careful author regress**, and no structural
     check sees it. This is the strongest evidence in this doc that R10 must be
     automated, not left to review discipline.
+
+14. **3-for-3: every deep-slice defect was an OWL semantic trap (the key result).**
+    Three symbolic-reasoning slices, authored carefully with the specs open, each
+    shipped exactly one content error, and all three were the *same family* —
+    OWA-as-CWA, no-unique-names, vacuous-truth-≠-OWA (plus the inference-vs-validation
+    one from the bug-fix slice). Each passed `npm run check`; each was caught only by
+    an adversarial domain re-audit. Two implications: (a) **content correctness is the
+    dominant failure mode at depth**, far more than structure/wiring; and (b) it is
+    **automatable** because the failures are an enumerable trap list, not open-ended
+    (see the R10 checklist table). This is the single most important finding for the
+    "generate these reliably at high quality" goal: the quality gate that matters most
+    is a frozen OWL-semantics-trap eval, and it is buildable today with prompt_eval.
 
 **Bottom line.** The hand-expansion produced a genuinely non-linear, convergent
 graph — three branches converging on `neurosymbolic`; the most-depended-upon
