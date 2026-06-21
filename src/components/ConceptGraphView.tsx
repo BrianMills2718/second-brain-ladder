@@ -43,22 +43,30 @@ const STAGE_INDEX: Record<string, number> = Object.fromEntries(
 const stageNum = (id: string): number =>
   STAGE_INDEX[CONCEPT_BY_ID[id]?.introducedIn ?? ""] ?? 0;
 
-/** Layout by curriculum stage: x = stage column, y = dependency order within the
- *  stage (global simplest-first rank). Grouping by stage keeps a stage's concepts
- *  together and unrelated ones apart. */
+/** Layout by curriculum stage, wrapping deep stages into a grid. x advances per
+ *  stage (spaced by how many sub-columns that stage needs); within a stage, concepts
+ *  fill top-to-bottom in dependency order, then wrap to the next sub-column once a
+ *  stage exceeds ROWS. A single tall column for an 18-concept stage was illegible
+ *  (the stage-column layout didn't scale with depth); the grid keeps every stage
+ *  compact and stages cleanly separated. */
+const ROWS = 9;
+const COLW = 178;
+const ROWH = 86;
+const STAGE_GAP = 56;
 function layout(): Record<string, { x: number; y: number }> {
   const rank: Record<string, number> = {};
   conceptTopoOrder().forEach((id, i) => (rank[id] = i));
   const byStage: Record<number, string[]> = {};
   for (const c of CONCEPT_GRAPH.concepts) (byStage[stageNum(c.id)] ??= []).push(c.id);
   const pos: Record<string, { x: number; y: number }> = {};
-  for (const k of Object.keys(byStage)) {
-    const col = Number(k);
-    byStage[col]
-      .sort((a, b) => rank[a] - rank[b])
-      .forEach((id, i) => {
-        pos[id] = { x: col * 230 + 20, y: i * 80 + 20 };
-      });
+  let x0 = 20;
+  for (const k of Object.keys(byStage).map(Number).sort((a, b) => a - b)) {
+    const ids = byStage[k].sort((a, b) => rank[a] - rank[b]);
+    const cols = Math.max(1, Math.ceil(ids.length / ROWS));
+    ids.forEach((id, i) => {
+      pos[id] = { x: x0 + Math.floor(i / ROWS) * COLW, y: 20 + (i % ROWS) * ROWH };
+    });
+    x0 += cols * COLW + STAGE_GAP;
   }
   return pos;
 }
