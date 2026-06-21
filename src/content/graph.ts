@@ -28,6 +28,8 @@ const BRANCH: Record<string, Branch> = {
   "sb-construction": "neurosymbolic",
   "sb-llm-kg": "neurosymbolic",
   "sb-kgml": "neural",
+  "sb-eval": "second-brain",
+  "sb-reasoning-adv": "reasoning",
 };
 
 const firstSentence = (s: string): string => (s.split(/(?<=\.)\s/)[0] ?? s).slice(0, 96);

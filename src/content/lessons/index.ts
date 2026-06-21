@@ -16,6 +16,8 @@ import { sbNeurosymbolic } from "./sb-neurosymbolic";
 import { sbConstruction } from "./sb-construction";
 import { sbLlmKg } from "./sb-llm-kg";
 import { sbKgml } from "./sb-kgml";
+import { sbEval } from "./sb-eval";
+import { sbReasoningAdv } from "./sb-reasoning-adv";
 
 export const LESSONS: Lesson[] = [
   sbOrientation,
@@ -31,11 +33,13 @@ export const LESSONS: Lesson[] = [
   sbConstruction,
   sbLlmKg,
   sbKgml,
+  sbEval,
+  sbReasoningAdv,
 ];
 
 export const UPCOMING: { stage: number; title: string }[] = [
-  { stage: 13, title: "Evaluation & Governance (FAIR, metrics, epistemic status)" },
-  { stage: 14, title: "Reasoning families (Datalog, chaining, non-monotonic)" },
+  { stage: 15, title: "Governance & Quality (FAIR, lineage, epistemic status)" },
+  { stage: 16, title: "Graph Neural Networks (message passing, R-GCN) — Frontier" },
 ];
 
 export function lessonById(id: string): Lesson | undefined {
