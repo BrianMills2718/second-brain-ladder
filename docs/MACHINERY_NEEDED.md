@@ -431,6 +431,26 @@ Concrete friction, in the order it bit:
     "generate these reliably at high quality" goal: the quality gate that matters most
     is a frozen OWL-semantics-trap eval, and it is buildable today with prompt_eval.
 
+15. **Rendering broke down at depth in three ways the data didn't (R11 + R13,
+    empirical).** Pushing the graph to ~49 concepts and *looking at the page*
+    surfaced what the validator can't: (a) the stage-column layout put 18 reasoning
+    concepts in one towering, cramped column while other stages were stubs — fixed
+    by grid-wrapping deep stages; (b) showing all ~49 at once is past the legibility
+    ceiling even after the layout fix — which means **R13's depth selector is
+    required for legibility, not a nice-to-have**: the only way a deep page stays
+    readable is letting the reader collapse to a band; (c) hand-tagged bands **broke
+    per-band closure** — `consistency`/`propose-verify` (foundations) depended on
+    concepts I'd tagged practitioner, so a Foundations view had dangling deps and
+    nothing checked it. Fix: the view derives an *effective* band by propagating up
+    the DAG (a concept is only as shallow as its deepest prerequisite), so every
+    depth view is closed by construction. **Machinery takeaways:** layout must scale
+    with depth (grid/auto-layout, R8); the depth selector is a hard requirement at
+    scale (R13); and per-band closure must be *derived or gated*, never hand-tagged —
+    the exact same lesson as hand-staging (R12) and goal/sink drift (R12), now for
+    bands. None of these are visible to tsc/validator/build; only rendering the page
+    and filtering it showed them — reinforcing R11 (a page is not done until it's
+    been rendered *and exercised* at the depth it will actually carry).
+
 **Bottom line.** The hand-expansion produced a genuinely non-linear, convergent
 graph — three branches converging on `neurosymbolic`; the most-depended-upon
 concepts are `entity` (9 dependants), `triple` (6), and `class`/`ontology`/
