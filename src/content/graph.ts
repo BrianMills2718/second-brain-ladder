@@ -1,44 +1,67 @@
 /**
- * The skill DAG. Concept nodes carry lesson content; achievement nodes are
- * capstones. The concept→concept prerequisite backbone is DERIVED from the
- * concept graph (concepts.ts) via deriveStageEdges() — edit concepts.ts, not
- * here. Only the achievement overlay and the non-gating orientation link are
- * hand-authored.
+ * The skill DAG — a DERIVED VIEW of the concept graph (see docs/PATH_DERIVATION.md, R14).
+ * One concept node is generated per lesson/module; positions are auto-laid-out by stage;
+ * the concept→concept prerequisite backbone is lifted from concepts.ts via
+ * deriveStageEdges(). The ONLY hand-authored part is the achievement overlay (capstones
+ * carry assessment refs + their prerequisite modules) and the orientation link. To add a
+ * module: add its lesson + tag its concepts' introducedIn — the node, edges, position,
+ * path slot, and concept panel all derive. Do NOT hand-add skill nodes here.
  */
-import type { SkillGraph, SkillNode, SkillEdge } from "../types";
+import type { SkillGraph, SkillNode, SkillEdge, Branch } from "../types";
 import { deriveStageEdges, transitiveReduction } from "./derive";
+import { LESSONS } from "./lessons";
 
-const concept = (
-  id: string,
-  branch: SkillNode["branch"],
-  lessonId: string,
-  title: string,
-  shortDescription: string,
-  position: { x: number; y: number },
-): SkillNode => ({ id, kind: "concept", branch, lessonId, title, shortDescription, position });
+const nodeId = (lessonId: string): string => "c-" + lessonId.replace(/^sb-/, "");
 
-const achievement = (
-  id: string,
-  branch: SkillNode["branch"],
-  title: string,
-  shortDescription: string,
-  assessmentIds: string[],
-  position: { x: number; y: number },
-): SkillNode => ({ id, kind: "achievement", branch, title, shortDescription, assessmentIds, position });
+/** Branch is cosmetic (node colour); declared per module, defaults to foundations. */
+const BRANCH: Record<string, Branch> = {
+  "sb-orientation": "foundations",
+  "sb-kg": "knowledge-graphs",
+  "sb-query": "knowledge-graphs",
+  "sb-modeling": "knowledge-graphs",
+  "sb-onto": "ontologies",
+  "sb-onto-eng": "ontologies",
+  "sb-reasoning": "reasoning",
+  "sb-expressivity": "reasoning",
+  "sb-neural": "neural",
+  "sb-neurosymbolic": "neurosymbolic",
+};
 
-const NODES: SkillNode[] = [
-  concept("c-orientation", "foundations", "sb-orientation", "Build a Second Brain", "A 2-min overview you can skip and return to.", { x: 320, y: -160 }),
-  concept("c-kg", "knowledge-graphs", "sb-kg", "Knowledge Graphs", "Entities, relations, triples; RDF vs property graphs.", { x: 80, y: 80 }),
-  concept("c-onto", "ontologies", "sb-onto", "Ontologies", "Classes, subclass, properties; TBox vs ABox.", { x: 360, y: 80 }),
-  concept("c-reasoning", "reasoning", "sb-reasoning", "Meaning & Reasoning", "Entailment, reasoners, the open-world gotcha.", { x: 640, y: 40 }),
-  concept("c-neural", "neural", "sb-neural", "The Neural Side & Identity", "Embeddings, LLM extraction, entity resolution.", { x: 360, y: 320 }),
-  concept("c-neurosymbolic", "neurosymbolic", "sb-neurosymbolic", "Neurosymbolic: Propose & Verify", "Neural proposes, symbolic verifies.", { x: 760, y: 300 }),
+const firstSentence = (s: string): string => (s.split(/(?<=\.)\s/)[0] ?? s).slice(0, 96);
 
-  achievement("a-model", "second-brain", "Model a Domain", "Design a small KG + ontology of your own.", ["cap-model"], { x: 220, y: 540 }),
-  achievement("a-reason", "reasoning", "Reason Over Your Brain", "Use disjointness, property chains, and classification.", ["cap-reason"], { x: 640, y: 540 }),
-  achievement("a-pipeline", "second-brain", "Design a Propose→Verify Brain", "Spec a neurosymbolic second brain.", ["cap-pipeline"], { x: 1040, y: 300 }),
+// --- DERIVED concept nodes: one per lesson/module, auto-positioned by stage (R14). ---
+const MODULE_COLW = 230;
+const byStage = [...LESSONS].sort((a, b) => a.stage - b.stage);
+const conceptNodes: SkillNode[] = byStage.map((l, i) => ({
+  id: nodeId(l.id),
+  kind: "concept",
+  branch: BRANCH[l.id] ?? "foundations",
+  lessonId: l.id,
+  title: l.title,
+  shortDescription: firstSentence(l.summary),
+  position: { x: l.stage * MODULE_COLW + 40, y: (i % 2) * 80 + 40 },
+}));
+
+// --- Achievement overlay (authored: assessment refs + prerequisite modules). ---
+const achievementDefs: { id: string; branch: Branch; title: string; short: string; assessmentIds: string[]; prereqs: string[] }[] = [
+  { id: "a-model", branch: "second-brain", title: "Model a Domain", short: "Design a small KG + ontology of your own.", assessmentIds: ["cap-model"], prereqs: ["c-kg", "c-onto"] },
+  { id: "a-reason", branch: "reasoning", title: "Reason Over Your Brain", short: "Use disjointness, property chains, and classification.", assessmentIds: ["cap-reason"], prereqs: ["c-onto", "c-reasoning"] },
+  { id: "a-pipeline", branch: "second-brain", title: "Design a Propose→Verify Brain", short: "Spec a neurosymbolic second brain.", assessmentIds: ["cap-pipeline"], prereqs: ["c-reasoning", "c-neural", "c-neurosymbolic"] },
 ];
+const posOf = (id: string): { x: number; y: number } | undefined => conceptNodes.find((n) => n.id === id)?.position;
+const achievementNodes: SkillNode[] = achievementDefs.map((a, i) => ({
+  id: a.id,
+  kind: "achievement",
+  branch: a.branch,
+  title: a.title,
+  shortDescription: a.short,
+  assessmentIds: a.assessmentIds,
+  position: { x: Math.max(40, ...a.prereqs.map((p) => posOf(p)?.x ?? 40)) + MODULE_COLW, y: 320 + (i % 2) * 90 },
+}));
 
+const NODES: SkillNode[] = [...conceptNodes, ...achievementNodes];
+
+// --- DERIVED prerequisite backbone (concepts.ts → module nodes). ---
 const STAGE_TO_NODE: Record<string, string> = {};
 for (const n of NODES) if (n.lessonId) STAGE_TO_NODE[n.lessonId] = n.id;
 
@@ -46,28 +69,19 @@ const DERIVED_PREREQS: [string, string][] = deriveStageEdges()
   .map(([a, b]) => [STAGE_TO_NODE[a], STAGE_TO_NODE[b]] as [string, string])
   .filter(([a, b]) => !!a && !!b);
 
-const PEDAGOGICAL_PREREQS: [string, string][] = [];
-
 const CONCEPT_PREREQS: [string, string][] = transitiveReduction(
-  Array.from(
-    new Map([...DERIVED_PREREQS, ...PEDAGOGICAL_PREREQS].map((e) => [`${e[0]}>${e[1]}`, e])).values(),
-  ),
+  Array.from(new Map(DERIVED_PREREQS.map((e) => [`${e[0]}>${e[1]}`, e])).values()),
 );
 
-const ACHIEVEMENT_PREREQS: [string, string][] = [
-  ["c-kg", "a-model"],
-  ["c-onto", "a-model"],
-  ["c-onto", "a-reason"],
-  ["c-reasoning", "a-reason"],
-  ["c-reasoning", "a-pipeline"],
-  ["c-neural", "a-pipeline"],
-  ["c-neurosymbolic", "a-pipeline"],
-];
+const ACHIEVEMENT_PREREQS: [string, string][] = achievementDefs.flatMap((a) =>
+  a.prereqs.map((p) => [p, a.id] as [string, string]),
+);
 
 const PREREQS: [string, string][] = [...CONCEPT_PREREQS, ...ACHIEVEMENT_PREREQS];
 
-/** Soft, non-gating link: the orientation map points to the starting atom. */
-const ORIENTS: [string, string][] = [["c-orientation", "c-kg"]];
+/** Soft, non-gating link: the orientation map points to the first real module. */
+const firstModule = byStage.find((l) => l.stage > 0);
+const ORIENTS: [string, string][] = firstModule ? [["c-orientation", nodeId(firstModule.id)]] : [];
 
 const EDGES: SkillEdge[] = [
   ...PREREQS.map(([source, target], i) => ({ id: `e${i}`, source, target, kind: "prerequisite_for" as const })),
