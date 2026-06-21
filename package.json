@@ -10,6 +10,7 @@
     "typecheck": "tsc -b --noEmit",
     "validate": "node scripts/validate-content.mjs",
     "test-gates": "node scripts/test-gates.mjs",
+    "check-content": "node scripts/check-content-correctness.mjs",
     "check": "tsc -b --noEmit && node scripts/test-gates.mjs && node scripts/validate-content.mjs && vite build",
     "screenshots": "node scripts/screenshots.mjs"
   },
