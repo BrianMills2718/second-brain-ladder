@@ -18,6 +18,7 @@ mkdirSync(OUT, { recursive: true });
 // [route, name, optional expand-the-panels?] — routes are #/node/<id> (App.tsx)
 const SHOTS = [
   ["", "home-skilltree", false],            // skill-tree edge routing + labels (now non-linear)
+  ["concepts", "concepts-view", false],     // the full concept DAG — must be multi-column, not one line
   ["node/c-orientation", "stage0-orientation", false],
   ["node/c-kg", "stage1-kg", true],         // concept panel (ADR-0002) + chips
   ["node/c-onto", "stage2-onto", true],     // TBox/ABox typed-graph

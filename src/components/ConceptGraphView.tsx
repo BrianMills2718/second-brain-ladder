@@ -19,6 +19,7 @@ import ReactFlow, { Background, Controls, MarkerType, type Edge, type Node } fro
 import "reactflow/dist/style.css";
 import { CONCEPT_GRAPH, CONCEPT_BY_ID, conceptTopoOrder, prereqWhy, prereqKindOf, PREREQ_KINDS, type PrereqKind } from "../content/concepts";
 import { conceptSCCs, goalClosure } from "../content/derive";
+import { LESSONS } from "../content/lessons";
 
 /** Color per prerequisite kind (ADR-0005), used for the edge + the legend. */
 const KIND_COLOR: Record<PrereqKind, string> = {
@@ -33,10 +34,14 @@ import { LAYER_META } from "./viz/legend";
 import { flowNodeTypes, flowEdgeTypes, pickHandles } from "./viz/flow";
 import { RichLine } from "./Math";
 
-const stageNum = (id: string): number => {
-  const m = (CONCEPT_BY_ID[id]?.introducedIn ?? "").match(/(\d+)/);
-  return m ? Number(m[1]) : 0;
-};
+// Stage index per lesson id. SB stage ids (`sb-kg`, `sb-onto`, …) carry no digit,
+// so the old regex-on-id returned 0 for every concept and collapsed the whole
+// graph into one column. Read the numeric stage from the lessons instead.
+const STAGE_INDEX: Record<string, number> = Object.fromEntries(
+  LESSONS.map((l) => [l.id, l.stage]),
+);
+const stageNum = (id: string): number =>
+  STAGE_INDEX[CONCEPT_BY_ID[id]?.introducedIn ?? ""] ?? 0;
 
 /** Layout by curriculum stage: x = stage column, y = dependency order within the
  *  stage (global simplest-first rank). Grouping by stage keeps a stage's concepts
