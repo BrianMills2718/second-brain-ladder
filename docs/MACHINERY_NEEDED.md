@@ -145,6 +145,13 @@ inference, OWA vs CWA, data vs schema). This is distinct from R6: R6 checks the
 concept *set* covers the domain's key ideas (coverage); R10 checks each
 *statement* is true (correctness). For a math-correctness-is-the-product site, R10
 outranks everything else here.
+**Second source (onto-canon6 methodology whitepaper, reviewed 2026-06-21):** it
+supplies two ready-made R10 mechanisms worth adopting as concepts *and* gates —
+**evidence-span grounding** (a structured claim must be supported by a cited source
+span, not just well-formed) and the explicit principle **"schema-valid ≠
+semantically true"** (valid JSON can be false). Both are first-class verify steps
+distinct from SHACL (shape) and the reasoner (consistency); see DOMAIN_COVERAGE.md
+"Governed construction & assertion lifecycle".
 
 ## R11. Rendered-artifact fidelity — the page must *show* the richness, not just hold it
 A correct, rich graph can still **render** as a linear chain. It did: the
@@ -192,6 +199,36 @@ and contrast symmetry — and misses every one of these, all found by the audit:
   declared goal *or* an explicitly-marked enrichment leaf. Currently an undeclared
   terminal is a silent warning; make it a gate.
 
+## R13. Selectable expertise depth — comprehensive by default, user-scoped view
+**Design directive (2026-06-21): the skill map exists so a learner chooses their
+target level.** The curriculum should be authored **deep and comprehensive** (the
+full DOMAIN_COVERAGE map, all bands), and the *view* should be filtered to the
+user's goal × depth — most users won't need everything, but nothing is cut. This is
+a both/and with R1: generate comprehensively, then let the reader scope down.
+Machinery:
+- **Band/track tags on every concept.** Each concept carries a depth band
+  (Foundations / Practitioner / Expert / Frontier) and optionally a track
+  (modeling / querying / ontology-engineering / reasoning / construction /
+  neurosymbolic / KG-ML / governance / domain-pack). Authoring or generation must
+  set these; the gate fails on an untagged concept.
+- **Per-band validity.** Each band must be a *self-contained sub-curriculum*: the
+  goal-closure of a band-scoped view must be closed (no Foundations concept depends
+  on a Practitioner concept), and R1 richness + R6 coverage run **per active band**,
+  not just globally. A Foundations-only page is judged against Foundations coverage;
+  an Expert page against Expert.
+- **The view selector.** Goal × depth → visible sub-graph. The existing mechanism is
+  the seed: `goalClosure()` + `core`/`enrichment` + the `coreOnly` toggle already
+  show a goal's backward closure and dim the rest. Generalize from one core/enrichment
+  split to N bands and multiple selectable goals/tracks; the UI lets the user pick
+  "I want to reach X at depth Y" and renders only that closure.
+- **Comprehensive-by-default generation (R5 interaction).** The propose→gate→revise
+  loop should target the *full* depth map, not the thin core — R1's richness bar and
+  R6's coverage bar are evaluated at the deepest declared band, so "go deep" is the
+  generator's default and scoping-down is a render-time concern, not an authoring cut.
+This turns "how expert do you want to be?" into a first-class axis of the graph,
+and makes "comprehensive" the generator's default while keeping any single page
+legible.
+
 ---
 
 ## Definition of done — a generated page is complete only when ALL hold
@@ -214,9 +251,12 @@ condition). Status = what exists today vs what this doc asks to be built.
 | 10 | downstream wiring (skill-graph node, positions, registrations) derived, not hand-edited | R8 | ❌ manual |
 | 11 | **every rendered route screenshotted; layout-sanity passes (multi-column, no collapse)** | **R11** | ⚠️ harness fixed, coverage+checks gap |
 | 12 | a frozen degenerate fixture still FAILS the richness gate (regression) | R1/R12 | ❌ fixture gone |
+| 13 | every concept band/track-tagged; each band is a closed sub-curriculum; goal×depth view renders that band's closure | **R13** | ⚠️ goal-closure seed exists; bands not built |
 
 Rows 5 and 11 are the two that bit *this* session despite everything else being
-green; rows 3, 4, 5, 11, 12 are the ones with no automation at all.
+green; rows 3, 4, 5, 11, 12 are the ones with no automation at all. Row 13 is the
+new go-deep/selectable-depth axis — its seed (goal closure + core/enrichment) exists
+but needs generalizing to N bands.
 
 ---
 

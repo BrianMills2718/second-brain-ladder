@@ -9,23 +9,33 @@ expert-level topic map (KG representation, Semantic Web standards, ontology
 engineering, logic/reasoning, querying, construction, KG-ML, neurosymbolic,
 LLM+KG, evaluation, systems, governance).
 
+**Design model (2026-06-21): go deep, let the user pick the level.** The skill map's
+*purpose* is that a learner selects their target expertise; most users won't need
+everything, but the curriculum should be **comprehensive by default** and let the
+user scope it. So nothing here is "out of scope" — instead every concept gets a
+**depth band**, and the UI shows the sub-graph for the user's chosen goal × depth
+(the existing goal-closure / `core`-vs-`enrichment` / `coreOnly` toggle is the seed
+of this; see R13 in MACHINERY_NEEDED.md). The bands replace the old A/B/C scope tiers:
+
 **How to read status:** ✓ have a concept · ◐ partial (mentioned in prose/example
-but not a first-class concept) · ✗ absent. **Tier** = scope decision for *this*
-product: **A** core to a second brain (should exist) · **B** enrichment (valuable,
-optional) · **C** out of scope (research/infra depth — explicit non-goal, so the
-coverage gate must NOT flag it).
+but not a first-class concept) · ✗ absent. **Tier = depth band** (selectable, not
+scope): **A = Foundations** (on by default — everyone) · **B = Practitioner**
+(opt-in — you're building a real brain) · **C = Expert/Frontier** (opt-in — research
+& infra depth). C is *off by default*, **not** "won't do"; the coverage gate checks
+each band as its own sub-curriculum, and only flags a concept missing *within a band
+the author declared in-target*.
 
 ---
 
-## Scope statement (what "second brain" bounds in/out)
-In: a **personal, multi-source, LLM-constructed, ontology-governed, queryable,
-trustworthy** knowledge base. That pulls in modeling (incl. provenance/time/context
-of real notes), querying, ontology-engineering *basics + reuse*, reasoning (OWA,
-validation-vs-inference, the expressivity that makes reasoning *do* something),
-neurosymbolic construction, and *light* KG-ML (link prediction, RAG).
-Out: the KG-embedding model zoo, GNN internals, complexity theory, distributed
-graph systems, triple-store engineering, deep governance/security, and
-domain-specific ontologies (biomed/finance/law).
+## Scope statement (the spine every band shares)
+The product is a **personal, multi-source, LLM-constructed, ontology-governed,
+queryable, trustworthy** knowledge base. Foundations (A) covers modeling +
+querying + ontology basics + OWA/validation-vs-inference + the propose-verify idea.
+Practitioner (B) covers ontology engineering & reuse, the full governed
+construction lifecycle, evidence grounding, fusion, link prediction, RAG.
+Expert/Frontier (C) covers OWL expressivity depth, reasoning families, the
+KG-embedding model zoo, GNNs, evaluation methodology, governance/FAIR, and
+research neurosymbolic — available as an opt-in track, layered on, never forced.
 
 ---
 
@@ -122,6 +132,26 @@ domain-specific ontologies (biomed/finance/law).
 | triple store, graph DB, reasoner, ontology editor (Protégé), materialized views | ◐ (reasoner) | C |
 | FAIR, access control, epistemic status, lineage, bias, privacy | ✗ | C |
 
+### Governed construction & assertion lifecycle (from the onto-canon6 methodology whitepaper)
+The whitepaper treats KG-building as a *governed assertion lifecycle*, not
+extraction-to-graph. It deepens the neurosymbolic/construction half and supplies a
+trustworthiness spine a "second brain" actually needs. Almost all absent.
+| Key idea | Status | Tier | Why it matters here |
+|---|---|---|---|
+| **assertion as the unit** (subj+pred+obj **+ scope + modality + provenance + evidence + policy + lifecycle**), richer than a triple | ✗ | **A/B** | reframes "what a fact in your brain *is*"; ties n-ary/reification/provenance/modality into one idea |
+| **candidate vs promoted state** (a proposal vs a durable commitment) | ◐ (propose-verify) | **A** | the propose-verify loop *is* this; name the two states |
+| **assertion lifecycle / state machine** (raw → candidate → validated → reviewed → promoted → superseded/deprecated/recanonicalized) | ✗ | **B** | the deep version of propose-verify; where trust is earned |
+| **evidence grounding** (is the claim *supported by a source span*?) — distinct from schema-valid and from reasoner-consistent | ✗ | **B** | the verify step LLM extraction most needs; catches hallucination at the source, not the schema |
+| **schema-valid ≠ semantically-true** ("valid JSON can be false") | ✗ | **A** | a sharp neurosymbolic *contrast/confusion* — and exactly the project's category-error mission |
+| **review / promotion event** (governed acceptance leaves a record) | ✗ | **B** | provenance of the *decision*, not just the fact |
+| **modality / epistemic status** (observed · inferred · asserted · disputed · predicted · deprecated) | ✗ | **B** | a trustworthy brain must mark *how it knows* each fact |
+| **recanonicalization / supersession / deprecation** (explicit change events, not hidden rewrites) | ✗ | **B** | your beliefs change; record the change. Ties temporal validity |
+| **progressive disclosure / staged extraction** (discovery → canonicalize → disambiguate → normalize → promote, each its own contract + failure vocab) | ✗ | **B** | the methodology behind "decompose `llm-extraction`"; makes failure localizable |
+| **policy context** (the ontology/governance rules in force at review time) | ✗ | **C** | makes promotion auditable across schema change |
+| **risk-tiered verification** (scale checks with blast radius) | ✗ | **C** | how to not over- or under-govern |
+| **provenance precedence / conflict resolution / truth discovery** (which source wins) | ✗ | **B** | multi-source brains contradict themselves |
+| **FAIR / lineage / auditability** | ✗ | **C** | governance-band depth |
+
 ---
 
 ## High-value gaps (Tier-A shortlist, ~18 concepts)
@@ -148,13 +178,16 @@ Add these for the curriculum to honestly cover "build a second brain":
 17. **KG-grounded RAG** — using the brain with an LLM.
 18. **NER / entity-linking / relation-extraction** — decompose `llm-extraction`.
 
-## Deliberate non-goals (Tier C — the gate must NOT flag these)
-KGE model zoo (TransE/RotatE/ComplEx/TuckER…), GNN internals (message passing,
-R-GCN, over-smoothing/over-squashing), computational complexity, distributed graph
-processing & partitioning, triple-store/index engineering, deep
-security/privacy/governance, and domain-specific ontologies (biomed/finance/law).
-These are real expertise but out of scope for a personal-second-brain curriculum;
-listing them here is what lets the R6 gate distinguish "missing" from "won't do."
+## Expert/Frontier band (Tier C — opt-in track, OFF by default, not "won't do")
+Under the go-deep / user-selectable model these are no longer cut — they are an
+advanced track the learner can switch on: KGE model zoo (TransE/RotatE/ComplEx/
+TuckER…), GNN internals (message passing, R-GCN, over-smoothing/over-squashing),
+computational complexity, distributed graph processing & partitioning, triple-store/
+index engineering, deep security/privacy/governance, evaluation methodology, and
+domain-specific ontologies (biomed/finance/law as selectable *domain packs*). The
+coverage gate treats band C as in-target only when the author/learner has opted into
+it, so a Foundations-only page isn't flagged for "missing GNNs" — but an Expert page
+is. That conditional-by-band check is the R6+R13 interaction.
 
 ## Note for the machinery
 This file is the machine-checkable side of R6: the gate reads the Tier-A list as
