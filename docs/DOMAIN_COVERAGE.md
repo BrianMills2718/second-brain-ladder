@@ -4,8 +4,11 @@
 concept set *covers the domain's known key ideas* and *flag omissions* — and that
 it should seed from an authoritative syllabus. This file is that syllabus for
 "build a second brain over KGs / ontologies / neurosymbolic AI", plus the current
-coverage status. It was produced by reconciling the 35-concept graph against an
-expert-level topic map (KG representation, Semantic Web standards, ontology
+coverage status. It was first produced by reconciling the (then 35-concept) graph
+against an expert-level topic map; the curriculum has since grown to **100 concepts /
+17 modules** covering Foundations→Frontier, so most Tier-A/B items below are now BUILT
+(the R6 gate in `coverage.ts` is the live contract — this file is the rationale). Areas:
+expert topic map (KG representation, Semantic Web standards, ontology
 engineering, logic/reasoning, querying, construction, KG-ML, neurosymbolic,
 LLM+KG, evaluation, systems, governance).
 

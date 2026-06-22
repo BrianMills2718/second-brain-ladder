@@ -1,13 +1,15 @@
 /**
- * Concept dependency DAG (ADR-0002) for the Second Brain curriculum — the source
- * of truth. Hand-expanded (2026-06-21) from a thin 11-concept chain to a richer,
- * non-linear graph to surface what authoring machinery is needed (see
- * docs/MACHINERY_NEEDED.md). Every prerequisite has a PREREQ_WHY + PREREQ_KIND.
+ * Concept dependency DAG (ADR-0002) — the SOURCE OF TRUTH for the Second Brain
+ * curriculum (100 concepts across 17 modules). Everything else (skill tree, path,
+ * positions, glossary, panels) derives from this; see docs/SYSTEM.md. Every
+ * prerequisite has a PREREQ_WHY + PREREQ_KIND (the two side-tables below).
  *
- * Stage order (introducedIn) is load-bearing: a prerequisite must be introduced
- * in the same or an EARLIER stage. Cross-branch edges (e.g. entity-resolution →
- * similarity) forced the stage banding below — a manual ordering pain (R8).
- *   sb-kg(1) → sb-onto(2) → sb-reasoning(3) → sb-neural(4) → sb-neurosymbolic(5)
+ * Invariants (all gated by scripts/validate-content.mjs + gates.mjs):
+ *   - `prerequisites` acyclic; `@c{}` refs are transitive prerequisites (closure).
+ *   - `introducedIn` names the module; a prereq's module stage ≤ this concept's.
+ *   - `band` (foundations<practitioner<expert<frontier) ≥ every prerequisite's band.
+ *   - each module holds ≤9 concepts; every term has a glossary entry.
+ * To extend: see the runbook in docs/SYSTEM.md §3.
  */
 import type { Concept, ConceptGraph } from "../types";
 

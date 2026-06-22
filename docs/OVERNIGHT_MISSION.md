@@ -1,5 +1,8 @@
 # Overnight autonomous build — mission & acceptance
 
+> **ARCHIVAL.** This is a historical session log, not a live spec. For the current
+> system see `docs/SYSTEM.md`; for requirements see `docs/MACHINERY_NEEDED.md`.
+
 **Started:** 2026-06-21. **Directive:** "set up all work … then implement until it is
 done." NEVER STOP except for genuinely irreversible+shared-state actions or an
 un-defaultable architectural decision. Re-read this file after any compaction.

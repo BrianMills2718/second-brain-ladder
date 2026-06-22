@@ -1,9 +1,19 @@
 # Machinery needed to author rich concept graphs (discovered by hand-expanding)
 
-**Purpose.** The other agent is building the generation/authoring machinery. This
-doc is the *requirements*, discovered empirically by hand-expanding the Second
-Brain concept graph from a thin, linear 11-concept stub into a rich, non-linear
-graph. Each requirement is grounded in a specific pain hit during the expansion.
+> **Reader note.** This is the *requirements & findings record* — the **why**, each
+> grounded in a pain hit while building. For the current implemented system (what's
+> enforced, where, how to run, how to extend) read **`docs/SYSTEM.md`** instead.
+> Numbers in the dated **pain log** below (e.g. "35 concepts", "61 edges") are
+> *historical snapshots* from when each entry was written — the curriculum is now
+> 100 concepts / 17 modules (run `npm run check` for live counts). The requirement
+> sections (R1–R14) and the Definition-of-Done table reflect the current design;
+> most rows are now BUILT (see the table's status column).
+
+**Purpose.** This doc is the *requirements*, discovered empirically by hand-expanding
+the Second Brain concept graph from a thin, linear 11-concept stub into a rich,
+non-linear graph. Each requirement is grounded in a specific pain hit during the
+expansion. The deterministic gates (R1, R4, R6, R9, R11, R12, R13, R14) and the LLM
+content-correctness gate (R10) are implemented; see `docs/SYSTEM.md` §2 for the map.
 
 **The core finding (why the first attempt was thin & linear).** The validator
 gates **structural correctness** (acyclic / definition-closed / every edge
