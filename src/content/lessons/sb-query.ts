@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbQuery: Lesson = {
   id: "sb-query",
-  stage: 2,
+  stage: 5,
   title: "Querying Your Graph",
   summary:
     "A second brain is only as good as your ability to ask it things. A query retrieves the matches to a pattern instead of making you read the whole graph; the core idea — a basic graph pattern of triples-with-variables — is the same whether you write SPARQL over RDF or Cypher over a property graph.",

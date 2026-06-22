@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbModeling: Lesson = {
   id: "sb-modeling",
-  stage: 3,
+  stage: 6,
   title: "Facts About Facts",
   summary:
     "Real notes need more than flat binary triples: events relate more than two things, and a trustworthy brain has to record where a fact came from, when it held, and which source it's from. These are the modeling moves — n-ary relations, reification, named graphs, temporal validity — that make a second brain trustworthy rather than a pile of context-free assertions.",

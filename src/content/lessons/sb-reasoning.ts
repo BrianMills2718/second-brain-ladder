@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbReasoning: Lesson = {
   id: "sb-reasoning",
-  stage: 6,
+  stage: 9,
   title: "Meaning & Reasoning",
   summary:
     "Give your brain a reasoner and it stops being a lookup table: it derives facts you never stored and flags contradictions. The catch is the open-world assumption — 'not stored' means unknown, not false.",

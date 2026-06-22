@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbOnto: Lesson = {
   id: "sb-onto",
-  stage: 4,
+  stage: 7,
   title: "Ontologies",
   summary:
     "A knowledge graph says what's connected; an ontology says what those connections mean. Classes, a subclass hierarchy, and typed properties — the schema (TBox) over your data (ABox) — are what let your second brain derive facts you never wrote down.",

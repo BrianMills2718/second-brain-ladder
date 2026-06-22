@@ -514,9 +514,9 @@ const CONCEPTS: Concept[] = [
     prerequisites: ["triple", "property-graph"], introducedIn: "sb-framing",
     microQuiz: [{ id: "mq-rep-choice", type: "true-false", prompt: "True or false: the (subject, predicate, object) triple is the one correct way to represent any fact.", correct: false, explanation: "It is one modeling choice (RDF's). It is awkward for symmetric and n-ary facts; property graphs and other models are valid alternatives." }] },
   { id: "schema-valid-vs-true", term: "schema-valid ≠ true", layer: "logic", band: "foundations",
-    short: "A category error to avoid: a fact can be *well-formed* — valid JSON, a syntactically fine @c{triple}, passing @c{validation} — and still be FALSE. Structural correctness is about *shape*; truth is about *the world*. A schema checks the form; it cannot check the fact. `(Earth, hasMoonCount, 7)` is a perfectly valid triple and simply untrue.",
+    short: "A category error to avoid: a fact can be *well-formed* — valid JSON, a syntactically fine @c{triple}, passing schema validation — and still be FALSE. Structural correctness is about *shape*; truth is about *the world*. A schema checks the form; it cannot check the fact. `(Earth, hasMoonCount, 7)` is a perfectly valid triple and simply untrue.",
     example: "`(Ada_Lovelace, bornIn, 1850)` is a well-formed triple that passes every schema check — and is false (she was born in 1815). Valid ≠ true.",
-    prerequisites: ["triple", "validation"], introducedIn: "sb-framing",
+    prerequisites: ["triple"], introducedIn: "sb-framing",
     microQuiz: [{ id: "mq-schema-true", type: "multiple-choice", prompt: "A fact passes your schema validator. What does that tell you?", options: ["it is true", "it is well-formed / correctly shaped — but possibly false", "it will never need updating", "it was extracted by an LLM"], correct: 1, explanation: "Validation checks structure (shape), not truth. A perfectly valid fact can still be false." }] },
 ];
 
@@ -730,7 +730,6 @@ export const PREREQ_WHY: Record<string, string> = {
   "representation-choice>triple": "the triple is the modeling choice being weighed (and its limits shown)",
   "representation-choice>property-graph": "a property graph is the alternative that puts attributes on edges",
   "schema-valid-vs-true>triple": "the example of a valid-but-false fact is a well-formed triple",
-  "schema-valid-vs-true>validation": "the point is that passing validation (shape) is not truth",
 };
 
 export function prereqWhy(concept: string, prereq: string): string | undefined {
@@ -944,7 +943,6 @@ export const PREREQ_KIND: Record<string, PrereqKind> = {
   "representation-choice>triple": "operates-on",
   "representation-choice>property-graph": "operates-on",
   "schema-valid-vs-true>triple": "operates-on",
-  "schema-valid-vs-true>validation": "assumes",
 };
 
 export function prereqKindOf(concept: string, prereq: string): PrereqKind | undefined {
