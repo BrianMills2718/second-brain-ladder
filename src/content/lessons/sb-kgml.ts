@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbKgml: Lesson = {
   id: "sb-kgml",
-  stage: 12,
+  stage: 14,
   title: "Learning Over the Graph",
   summary:
     "Beyond symbolic reasoning, you can *learn* from the graph's structure: embed entities and relations as vectors, score how plausible a triple is, and predict the links you never stored — completing your brain with statistics where logic is silent. (Expert track.)",

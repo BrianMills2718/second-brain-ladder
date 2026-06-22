@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbGnn: Lesson = {
   id: "sb-gnn",
-  stage: 16,
+  stage: 18,
   title: "Graph Neural Networks",
   summary:
     "The frontier of learning over graphs: instead of embedding each entity in isolation, a GNN lets every node's vector absorb its neighbourhood through message passing — powerful for prediction over your brain's structure, with its own failure modes. (Frontier track.)",

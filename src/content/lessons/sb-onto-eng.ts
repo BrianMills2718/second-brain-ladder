@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbOntoEng: Lesson = {
   id: "sb-onto-eng",
-  stage: 5,
+  stage: 8,
   title: "Ontology Engineering",
   summary:
     "A good ontology is engineered, not improvised: you start from the questions it must answer, you reuse existing vocabularies instead of inventing terms, and you know the difference between a taxonomy, a thesaurus, and a full ontology with logical axioms.",

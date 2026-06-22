@@ -12,6 +12,30 @@ import { VizRenderer } from "./viz/VizRenderer";
 import { Quiz } from "./Quiz";
 import { NotationPanel, ConceptPanel, PrereqPretest } from "./Definitions";
 import { markVisited, useProgress } from "../store/progress";
+import { SectionFlag, FeedbackPanel, sectionKeyFor } from "./SectionFeedback";
+
+/**
+ * A lesson-block heading with an inline per-section feedback flag. The flag sits
+ * in a 0-width anchor at the end of the heading row, so it never reflows the
+ * prose; sections without a heading get a flag of their own (labelled by a
+ * synthesized name) so EVERY block is addressable.
+ */
+function BlockTitle({
+  lessonId,
+  heading,
+  sectionKey,
+}: {
+  lessonId: string;
+  heading: string;
+  sectionKey: string;
+}) {
+  return (
+    <h3 className="lesson-block-h">
+      <span>{heading}</span>
+      <SectionFlag lessonId={lessonId} sectionHeading={heading} sectionKey={sectionKey} />
+    </h3>
+  );
+}
 
 export function LessonPage({ lesson }: { lesson: Lesson }) {
   const progress = useProgress(lesson.id);
@@ -27,6 +51,7 @@ export function LessonPage({ lesson }: { lesson: Lesson }) {
 
   return (
     <article className="lesson">
+      <FeedbackPanel lessonId={lesson.id} />
       <header className="lesson-head">
         <div className="lesson-stage-badge">Stage {lesson.stage}</div>
         <h2 className="lesson-title">{lesson.title}</h2>
@@ -48,7 +73,7 @@ export function LessonPage({ lesson }: { lesson: Lesson }) {
       <NotationPanel lesson={lesson} />
 
       <section className="lesson-block">
-        <h3>What you'll be able to do</h3>
+        <BlockTitle lessonId={lesson.id} heading="What you'll be able to do" sectionKey="objectives" />
         <ul className="objectives">
           {lesson.objectives.map((o, i) => (
             <li key={i}>{o}</li>
@@ -57,7 +82,7 @@ export function LessonPage({ lesson }: { lesson: Lesson }) {
       </section>
 
       <section className="lesson-block">
-        <h3>Definitions</h3>
+        <BlockTitle lessonId={lesson.id} heading="Definitions" sectionKey="definitions" />
         <dl className="definitions">
           {lesson.definitions.map((d) => (
             <div className="def" key={d.term}>
@@ -81,22 +106,39 @@ export function LessonPage({ lesson }: { lesson: Lesson }) {
         </dl>
       </section>
 
-      {lesson.sections.map((s, i) => (
-        <section className="lesson-block prose" key={i}>
-          {s.heading && <h3>{s.heading}</h3>}
-          <RichText text={s.body} />
-        </section>
-      ))}
+      {lesson.sections.map((s, i) => {
+        const key = sectionKeyFor(s.heading, i);
+        const label = s.heading?.trim() || `Section ${i + 1}`;
+        return (
+          <section className="lesson-block prose" key={i}>
+            {s.heading ? (
+              <BlockTitle lessonId={lesson.id} heading={s.heading} sectionKey={key} />
+            ) : (
+              <div className="lesson-block-flagbar">
+                <SectionFlag lessonId={lesson.id} sectionHeading={label} sectionKey={key} />
+              </div>
+            )}
+            <RichText text={s.body} />
+          </section>
+        );
+      })}
 
       {lesson.visualizations.map((v) => (
         <section className="lesson-block" key={v.id}>
+          <div className="lesson-block-flagbar">
+            <SectionFlag
+              lessonId={lesson.id}
+              sectionHeading={`Visualization: ${v.title}`}
+              sectionKey={`viz:${v.id}`}
+            />
+          </div>
           <VizRenderer viz={v} />
         </section>
       ))}
 
       {lesson.confusions.length > 0 && (
         <section className="lesson-block">
-          <h3>Common confusions</h3>
+          <BlockTitle lessonId={lesson.id} heading="Common confusions" sectionKey="confusions" />
           <div className="confusions">
             {lesson.confusions.map((c, i) => (
               <div className="confusion" key={i}>
@@ -115,7 +157,7 @@ export function LessonPage({ lesson }: { lesson: Lesson }) {
       )}
 
       <section className="lesson-block">
-        <h3>Check yourself</h3>
+        <BlockTitle lessonId={lesson.id} heading="Check yourself" sectionKey="quiz" />
         <Quiz lessonId={lesson.id} questions={lesson.quiz} />
       </section>
 

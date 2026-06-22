@@ -20,17 +20,21 @@ import { sbEval } from "./sb-eval";
 import { sbReasoningAdv } from "./sb-reasoning-adv";
 import { sbGovernance } from "./sb-governance";
 import { sbGnn } from "./sb-gnn";
+import { sbRetrieve } from "./sb-retrieve";
+import { sbFraming } from "./sb-framing";
 
 export const LESSONS: Lesson[] = [
   sbOrientation,
   sbKg,
+  sbNeural,
+  sbRetrieve,
+  sbFraming,
   sbQuery,
   sbModeling,
   sbOnto,
   sbOntoEng,
   sbReasoning,
   sbExpressivity,
-  sbNeural,
   sbNeurosymbolic,
   sbConstruction,
   sbLlmKg,
@@ -42,7 +46,7 @@ export const LESSONS: Lesson[] = [
 ];
 
 export const UPCOMING: { stage: number; title: string }[] = [
-  { stage: 17, title: "Capstone: Design & Operate Your Second Brain" },
+  { stage: 19, title: "Capstone: Design & Operate Your Second Brain" },
 ];
 
 export function lessonById(id: string): Lesson | undefined {

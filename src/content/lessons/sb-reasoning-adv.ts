@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbReasoningAdv: Lesson = {
   id: "sb-reasoning-adv",
-  stage: 14,
+  stage: 16,
   title: "Reasoning Families",
   summary:
     "Entailment is one kind of reasoning. A second brain also generalizes (induction), guesses explanations (abduction), and retracts conclusions when facts arrive (non-monotonic) — and behind the scenes, Datalog and forward/backward chaining are the engines that make rule reasoning scale. (Expert track.)",

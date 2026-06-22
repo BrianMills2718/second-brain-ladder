@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbGovernance: Lesson = {
   id: "sb-governance",
-  stage: 15,
+  stage: 17,
   title: "Governance & Quality",
   summary:
     "A second brain you keep for years needs governance: measurable quality, an honest record of how you know each fact, the full lineage behind it, control over who sees what, and FAIR principles so it can be shared and reused.",

@@ -7,7 +7,7 @@ import type { Lesson } from "../../types";
 
 export const sbExpressivity: Lesson = {
   id: "sb-expressivity",
-  stage: 7,
+  stage: 10,
   title: "OWL Expressivity",
   summary:
     "The power of the symbolic side is the general rules you state once and the reasoner applies everywhere. Property characteristics (transitive, inverse, symmetric, functional), restrictions (cardinality, some/only), and defined classes turn a handful of axioms into automatic derivation and contradiction-catching.",

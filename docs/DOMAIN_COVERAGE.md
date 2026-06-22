@@ -1,200 +1,127 @@
 # Domain coverage map — the reference the R6 faithfulness gate checks against
 
-**Purpose.** R6 (MACHINERY_NEEDED.md) says the toolchain must check that the
-concept set *covers the domain's known key ideas* and *flag omissions* — and that
-it should seed from an authoritative syllabus. This file is that syllabus for
-"build a second brain over KGs / ontologies / neurosymbolic AI", plus the current
-coverage status. It was first produced by reconciling the (then 35-concept) graph
-against an expert-level topic map; the curriculum has since grown to **100 concepts /
-17 modules** covering Foundations→Frontier, so most Tier-A/B items below are now BUILT
-(the R6 gate in `coverage.ts` is the live contract — this file is the rationale). Areas:
-expert topic map (KG representation, Semantic Web standards, ontology
-engineering, logic/reasoning, querying, construction, KG-ML, neurosymbolic,
-LLM+KG, evaluation, systems, governance).
+**Purpose.** R6 says the toolchain must check the concept set *covers the domain's key
+ideas* against an authoritative syllabus, and flag omissions. This file is that syllabus.
+**Rescoped 2026-06-22** (see `docs/RESCOPE_PLAN.md`) off the 2018 symbolic-KG framing onto
+a **learner-empowerment, decision-first** frame grounded in `docs/research/` (the modern
+KG/GraphRAG/LLM-wiki/agentic landscape). The machine contract is `src/content/coverage.ts`;
+this file is the rationale and the **target** the contract is migrated toward (R1).
 
-**Design model (2026-06-21): go deep, let the user pick the level.** The skill map's
-*purpose* is that a learner selects their target expertise; most users won't need
-everything, but the curriculum should be **comprehensive by default** and let the
-user scope it. So nothing here is "out of scope" — instead every concept gets a
-**depth band**, and the UI shows the sub-graph for the user's chosen goal × depth
-(the existing goal-closure / `core`-vs-`enrichment` / `coreOnly` toggle is the seed
-of this; see R13 in MACHINERY_NEEDED.md). The bands replace the old A/B/C scope tiers:
+> **Migration note.** `coverage.ts` currently still enforces the *legacy* required set (so
+> `npm run check` stays green). R1 migrates `REQUIRED_CONCEPTS` to **this** contract
+> concept-by-concept as the new concepts are authored (the ratchet) — never a red build.
 
-**How to read status:** ✓ have a concept · ◐ partial (mentioned in prose/example
-but not a first-class concept) · ✗ absent. **Tier = depth band** (selectable, not
-scope): **A = Foundations** (on by default — everyone) · **B = Practitioner**
-(opt-in — you're building a real brain) · **C = Expert/Frontier** (opt-in — research
-& infra depth). C is *off by default*, **not** "won't do"; the coverage gate checks
-each band as its own sub-curriculum, and only flags a concept missing *within a band
-the author declared in-target*.
+## Scope statement (the new spine)
+The product teaches a learner to **build a personal knowledge system / "second brain" for
+their own goal** — *neutral on the "right" approach*. The terminal goal is **practitioner
+capability**, not coverage: *understand the alternatives → weigh tradeoffs → decide & plan
+→ implement → operate.* Three paradigms are a **fair decision menu**, each honestly costed:
 
----
+1. **Symbolic KG** — RDF/property-graph + ontologies + query/reasoning. *One option,
+   demoted from the center.*
+2. **GraphRAG** — an LLM builds a graph; you retrieve over it.
+3. **LLM-wiki / agentic** — front-load synthesis into navigable files; an agent harness
+   reads/maintains them.
 
-## Scope statement (the spine every band shares)
-The product is a **personal, multi-source, LLM-constructed, ontology-governed,
-queryable, trustworthy** knowledge base. Foundations (A) covers modeling +
-querying + ontology basics + OWA/validation-vs-inference + the propose-verify idea.
-Practitioner (B) covers ontology engineering & reuse, the full governed
-construction lifecycle, evidence grounding, fusion, link prediction, RAG.
-Expert/Frontier (C) covers OWL expressivity depth, reasoning families, the
-KG-embedding model zoo, GNNs, evaluation methodology, governance/FAIR, and
-research neurosymbolic — available as an opt-in track, layered on, never forced.
+…with **PKM** as the human-facing reality that maps onto all three (*a backlink is a graph
+edge; "AI over my notes" is RAG; an MOC is an agent index*).
+
+**Bands (selectable depth, not scope cuts).** **A = Foundations** (everyone — the
+decisions + minimal lifecycle every builder faces) · **B = Practitioner** (building a real
+system) · **C = Expert/Frontier** (research/infra/formal depth — opt-in, *not* "won't do").
+The gate checks each band as its own sub-curriculum.
+
+**How to read status:** ✓ concept exists · ◐ partial (in prose/example only) · ✗ absent.
+(Most are ✗ now — this is the post-rescope *target*; R1 builds it.)
 
 ---
 
-## Coverage by area
-
-### KG representation & data models
+## 0. Framing / meta (cross-cutting)
 | Key idea | Status | Tier |
 |---|---|---|
-| knowledge-graph, entity, relation, triple, IRI | ✓ | A |
-| **literal / attribute** (datatype value: dates, numbers, strings) | ✗ | **A** |
-| **n-ary relation** ("A gave B to C on date D") | ✗ | **A** |
-| **reification** (statement-as-entity, for provenance/time/confidence) | ✗ | **A** |
-| **named graph** (graph with an id: source/context/trust separation) | ✗ | **A** |
-| **contextual / temporal validity** (fact true only in a time/context) | ✗ | **A** |
-| RDF graph, property graph | ✓ | A |
-| labeled property graph | ◐ | B |
-| hypergraph, temporal graph, probabilistic graph, multimodal graph | ✗ | B/C |
+| what a "second brain" is; **PKM ↔ KG/AI are one artifact from two cultures** | ✗ | **A** |
+| **the three paradigms exist + when each fits** (symbolic / GraphRAG / LLM-wiki) | ✗ | **A** |
+| knowledge representation is a **choice**, not one true way | ◐ | **A** |
+| **schema-valid ≠ semantically true** (the category-error mission) | ✗ | **A** |
 
-### Semantic Web standards
+## 1. Plan / decide (the meta-skill)
 | Key idea | Status | Tier |
 |---|---|---|
-| RDF (as a model) | ◐ (rdf-graph) | A |
-| **RDFS** (lightweight class/property vocab) | ✗ | **A** |
-| OWL 2 (+ EL/QL/RL profiles) | ◐ (named in defs) | A/B |
-| **SPARQL** (query RDF) | ✗ | **A** |
-| SHACL (validation) | ✓ (shacl-validation) | A |
-| **SKOS** (taxonomy/thesaurus model) | ✗ | **A** |
-| JSON-LD, R2RML/Direct Mapping | ✗ | B |
-| **PROV-O** (provenance ontology — currently `provenance` is the idea, not the standard) | ◐ | B |
+| **requirements elicitation** (corpus size/type/growth; question shape — lookup vs global-summary vs multi-hop vs temporal; freshness; privacy/local; budget/latency; solo vs team; human-readable vs machine) | ✗ | **A** |
+| **mapping requirements → approach** (a neutral decision guide) | ✗ | **A** |
+| **MVP-first, reversibility, when to "graduate" to an index** | ✗ | **A** |
+| sizing / cost estimation | ✗ | B |
 
-### Ontology concepts & engineering
+## 2. Represent
 | Key idea | Status | Tier |
 |---|---|---|
-| ontology, class, instance, subclass | ✓ | A |
-| property (schema), domain, range | ◐ (one concept) | A |
-| **object property vs datatype property** | ✗ | **A** |
-| **disjointness** (also *fixes the `consistency` content bug*) | ✗ | **A** |
-| equivalence (class/property) | ✗ | A |
-| **cardinality / existential / universal restriction** | ✗ | **A** |
-| **property chain** (e.g. hasParent∘hasParent ⇒ hasGrandparent) | ✗ | A/B |
-| **competency questions** (the driver of ontology design) | ✗ | **A** |
-| **upper / domain / application ontology**; **reuse** (BFO, DOLCE, SUMO, FOAF, schema.org) | ✗ | **A** |
-| **ontology alignment / matching** | ✗ | **A** |
-| ontological commitment, patterns, modularization, versioning, evolution, governance | ✗ | B/C |
-| **taxonomy vs thesaurus vs ontology** (the "ontology ≠ taxonomy" category error) | ✗ | **A** |
+| entity, relation, **triple (s,p,o) — and its limits** (symmetric/n-ary; an RDF *modeling choice*, not a universal truth) | ◐ | **A** |
+| nodes/edges/properties; **property graph vs RDF** (the decision; *reasoning over property graphs is mostly tooling/history, not a fundamental limit*) | ◐ | **A** |
+| **links / backlinks / graph view** (the PKM bridge = a property graph) | ✗ | **A** |
+| **schema spectrum: schemaless → typed → ontology** (when a schema earns its cost) | ✗ | **A** |
+| literal/attribute, object- vs datatype-property, domain/range | ◐ | A/B |
+| n-ary relation, reification / **RDF-star**, named graph, temporal validity | ◐ | B |
+| ontology, class, subclass, instance | ✓ | B |
+| **RDF / RDFS / SPARQL / Cypher / GQL** (the symbolic paradigm's tools — *if you choose it*) | ◐ | B |
+| OWL expressivity depth (restrictions, property chains, profiles), **description logic** | ✓ | **C** |
 
-### Logic & reasoning
+## 3. Construct
 | Key idea | Status | Tier |
 |---|---|---|
-| entailment, reasoner, consistency, OWA/CWA, description-logic | ✓ | A |
-| **validation vs inference** (explicit contrast — *fixes the SHACL/reasoner bug*) | ✗ | **A** |
-| deductive / inductive / abductive reasoning | ◐ (deductive only) | B |
-| **non-monotonic / default reasoning** (ties to OWA) | ✗ | B |
-| datalog, horn clauses, forward/backward chaining, materialization, query rewriting | ✗ | B |
-| truth maintenance, paraconsistent, fuzzy, probabilistic logic | ✗ | C |
+| **manual modeling vs LLM-driven construction** (the build decision) | ◐ | **A** |
+| **the hallucination problem + filtering** (LLM-as-judge / evidence grounding) | ◐ | **A** |
+| LLM extraction decomposed: **NER / entity-linking / relation-extraction / coreference** | ◐ | A/B |
+| **entity resolution / dedup / canonicalization** | ✓ | A/B |
+| schema-guided / ontology-grounded extraction; open IE | ◐ | B |
+| **governed assertion lifecycle** (candidate→promoted; modality; provenance) | ◐ | B |
+| knowledge fusion / conflict resolution / truth discovery (multi-source) | ✗ | B |
 
-### Querying
+## 4. Retrieve (the decision ladder — the core skill)
 | Key idea | Status | Tier |
 |---|---|---|
-| **SPARQL / basic graph pattern** (the "queryable" promise the homepage makes) | ✗ | **A** |
-| **Cypher / GQL** (property-graph querying) | ◐ (one example) | A/B |
-| property path, conjunctive query, regular path query, federated query | ✗ | B |
-| reasoning-aware query answering | ✗ | B |
-| join ordering, indexing, cardinality estimation | ✗ | C |
+| **the retrieval decision ladder** (keyword → vector → hybrid+rerank → GraphRAG → agentic) | ✗ | **A** |
+| **embeddings / vector search / similarity**; keyword/BM25; **hybrid + reranking** | ◐ | **A** |
+| **RAG fundamentals + failure modes** (lost-in-middle; *no-global-view* → the GraphRAG gap) | ✗ | **A** |
+| **GraphRAG: local vs global, index-time vs query-time, community summarization** | ✗ | **A**/B |
+| **agentic retrieval — adopt a harness** (Claude Code/Codex/Cursor + **MCP/connectors/plugins**) over files | ✗ | **A**/B |
+| build-your-own agent loop (ReAct / Self-RAG / CRAG) — the **embedded/product** contrast | ✗ | B |
+| **LLM-wiki**: agent maintains navigable files; *full-context vs chunk-retrieval* | ◐ | **A** |
+| KG embeddings / **link prediction** / GNN reasoning (the neural-completion option's depth) | ◐ | **C** |
 
-### KG construction & integration
+## 5. Operate & govern (the neglected hard layer)
 | Key idea | Status | Tier |
 |---|---|---|
-| llm-extraction (text→triples), ontology-grounded extraction | ✓ | A |
-| **NER / entity linking / relation extraction / coreference** (decompose the extraction black box) | ◐ | A/B |
-| event extraction, slot filling, open IE, schema-guided extraction | ◐/✗ | B |
-| entity-resolution | ✓ | A |
-| **knowledge fusion / conflict resolution / truth discovery** (multi-source brain) | ✗ | **A** |
-| record linkage, canonicalization, dedup, schema matching | ✗ | B |
-| provenance | ✓ | A |
-
-### KG-ML, neurosymbolic, LLM+KG
-| Key idea | Status | Tier |
-|---|---|---|
-| embedding, similarity, kg-embedding | ✓ | A |
-| **link prediction / graph completion** (fill in your brain) | ✗ | **A** |
-| triple classification, entity/relation prediction, entity alignment | ✗ | B |
-| KGE model zoo (TransE/RotatE/ComplEx/…), tensor factorization | ✗ | **C** |
-| GNNs (message passing, R-GCN, over-smoothing, …) | ✗ | **C** |
-| neurosymbolic, propose-verify, hallucination | ✓ | A |
-| **KG-grounded RAG** (use the brain with an LLM) | ✗ | **A** |
-| differentiable reasoning, semantic loss, rule learning, query embedding, MLN/PSL | ✗ | B/C |
-| LLM failure modes: schema drift, entity conflation, temporal invalidity, benchmark leakage | ◐ (hallucination only) | B |
-
-### Evaluation, systems, governance
-| Key idea | Status | Tier |
-|---|---|---|
-| precision/recall/F1, MRR, Hits@K, calibration, ablation, consistency-eval | ✗ | B |
-| triple store, graph DB, reasoner, ontology editor (Protégé), materialized views | ◐ (reasoner) | C |
-| FAIR, access control, epistemic status, lineage, bias, privacy | ✗ | C |
-
-### Governed construction & assertion lifecycle (from the onto-canon6 methodology whitepaper)
-The whitepaper treats KG-building as a *governed assertion lifecycle*, not
-extraction-to-graph. It deepens the neurosymbolic/construction half and supplies a
-trustworthiness spine a "second brain" actually needs. Almost all absent.
-| Key idea | Status | Tier | Why it matters here |
-|---|---|---|---|
-| **assertion as the unit** (subj+pred+obj **+ scope + modality + provenance + evidence + policy + lifecycle**), richer than a triple | ✗ | **A/B** | reframes "what a fact in your brain *is*"; ties n-ary/reification/provenance/modality into one idea |
-| **candidate vs promoted state** (a proposal vs a durable commitment) | ◐ (propose-verify) | **A** | the propose-verify loop *is* this; name the two states |
-| **assertion lifecycle / state machine** (raw → candidate → validated → reviewed → promoted → superseded/deprecated/recanonicalized) | ✗ | **B** | the deep version of propose-verify; where trust is earned |
-| **evidence grounding** (is the claim *supported by a source span*?) — distinct from schema-valid and from reasoner-consistent | ✗ | **B** | the verify step LLM extraction most needs; catches hallucination at the source, not the schema |
-| **schema-valid ≠ semantically-true** ("valid JSON can be false") | ✗ | **A** | a sharp neurosymbolic *contrast/confusion* — and exactly the project's category-error mission |
-| **review / promotion event** (governed acceptance leaves a record) | ✗ | **B** | provenance of the *decision*, not just the fact |
-| **modality / epistemic status** (observed · inferred · asserted · disputed · predicted · deprecated) | ✗ | **B** | a trustworthy brain must mark *how it knows* each fact |
-| **recanonicalization / supersession / deprecation** (explicit change events, not hidden rewrites) | ✗ | **B** | your beliefs change; record the change. Ties temporal validity |
-| **progressive disclosure / staged extraction** (discovery → canonicalize → disambiguate → normalize → promote, each its own contract + failure vocab) | ✗ | **B** | the methodology behind "decompose `llm-extraction`"; makes failure localizable |
-| **policy context** (the ontology/governance rules in force at review time) | ✗ | **C** | makes promotion auditable across schema change |
-| **risk-tiered verification** (scale checks with blast radius) | ✗ | **C** | how to not over- or under-govern |
-| **provenance precedence / conflict resolution / truth discovery** (which source wins) | ✗ | **B** | multi-source brains contradict themselves |
-| **FAIR / lineage / auditability** | ✗ | **C** | governance-band depth |
+| **maintenance** (incremental re-index, dedup, dead-link/contradiction lint, idempotent re-ingest) | ✗ | **A**/B |
+| **evaluation** (golden set, RAGAS / faithfulness, gating updates) | ✗ | **A**/B |
+| **temporal / bi-temporal validity** (valid-time vs transaction-time) | ✗ | B |
+| cost / latency / observability | ✗ | B |
+| provenance, versioning, forgetting / privacy | ◐ | B |
+| **agent-memory substrates** (graph vs flat — Zep/Graphiti, Mem0) | ✗ | B |
+| FAIR / lineage / access control / epistemic status | ✗ | C |
 
 ---
 
-## High-value gaps (Tier-A shortlist, ~18 concepts)
-Add these for the curriculum to honestly cover "build a second brain":
-1. **literal** (datatype values) — triples currently only have entity objects.
-2. **object-property vs datatype-property** + first-class **domain/range**.
-3. **n-ary relation** and **4. reification** (+ the modern **RDF-star / named graph**
-   mechanism) — *the* way provenance/time/confidence attach to facts; `provenance`
-   is already a goal concept with no mechanism behind it.
-5. **named graph** · **6. contextual/temporal validity**.
-7. **query / SPARQL** (basic graph pattern) — the homepage's "stays queryable" claim
-   has no concept behind it. (+ Cypher/GQL for property graphs.)
-8. **disjointness** — *and it fixes the `consistency` content bug*.
-9. **validation vs inference** (contrast) — *and it fixes the SHACL/reasoner bug*.
-10. **cardinality / existential / universal restriction** + **property chain** — the
-    OWL expressivity that makes reasoning produce non-trivial entailments.
-11. **RDFS** + **OWL profiles** (standards placement).
-12. **taxonomy vs thesaurus vs ontology (SKOS)** — a mission-aligned category error.
-13. **competency questions** — the "build" framing's actual starting point.
-14. **ontology reuse / upper+domain ontologies / alignment** (SUMO, FOAF, schema.org)
-    — "don't reinvent; align to existing ontologies."
-15. **knowledge fusion / conflict resolution** — a multi-source brain needs it.
-16. **link prediction / graph completion** — completing the brain.
-17. **KG-grounded RAG** — using the brain with an LLM.
-18. **NER / entity-linking / relation-extraction** — decompose `llm-extraction`.
+## Tier-A target shortlist (what R1 must build for an honest "build a second brain")
+The Foundations bar — the literate-builder set. (✗ today; this is the rescope's R1 scope.)
+1. **The three paradigms + when each fits**, and PKM↔KG/AI equivalence (framing).
+2. **The plan/decide meta-skill** — requirements → approach mapping; MVP-first.
+3. **Triple + its limits**; **property graph vs RDF** (the represent decision); **links/graph-view** as the PKM bridge; the **schema spectrum**.
+4. **RAG fundamentals + the retrieval decision ladder** (keyword → vector → hybrid → GraphRAG → agentic).
+5. **GraphRAG local-vs-global** and **index-vs-query-time**.
+6. **Agentic-harness retrieval** (adopt + extend; MCP) and the **LLM-wiki** pattern.
+7. **LLM construction + hallucination filtering**; **entity resolution**.
+8. **Operate**: maintenance + evaluation as first-class (not an afterthought).
+9. **schema-valid ≠ semantically true** (the category-error mission, retained).
 
-## Expert/Frontier band (Tier C — opt-in track, OFF by default, not "won't do")
-Under the go-deep / user-selectable model these are no longer cut — they are an
-advanced track the learner can switch on: KGE model zoo (TransE/RotatE/ComplEx/
-TuckER…), GNN internals (message passing, R-GCN, over-smoothing/over-squashing),
-computational complexity, distributed graph processing & partitioning, triple-store/
-index engineering, deep security/privacy/governance, evaluation methodology, and
-domain-specific ontologies (biomed/finance/law as selectable *domain packs*). The
-coverage gate treats band C as in-target only when the author/learner has opted into
-it, so a Foundations-only page isn't flagged for "missing GNNs" — but an Expert page
-is. That conditional-by-band check is the R6+R13 interaction.
+## Tier-C — opt-in depth, OFF by default (not "won't do")
+Deep OWL 2 / description-logic formal semantics; the KG-embedding model zoo math
+(TransE/RotatE/ComplEx internals); GNN architecture internals (message passing, R-GCN,
+over-smoothing); distributed graph processing / triple-store & index engineering;
+deep evaluation methodology; domain ontology packs (biomed/finance/law). The gate treats
+band C as in-target only when the author/learner opts in.
 
 ## Note for the machinery
-This file is the machine-checkable side of R6: the gate reads the Tier-A list as
-**required coverage** (flag any absent), the Tier-C list as **explicit non-goals**
-(never flag), and Tier-B as **suggestions** (warn, don't fail). When the domain or
-scope changes, edit this file — it is the coverage contract, the way `concepts.ts`
-is the structure contract.
+The R6 gate reads `coverage.ts`: **Tier-A = required** (FAIL if a key idea has no concept),
+**Tier-C = explicit non-goals** (never flag), **Tier-B = advisory** (warn). This file is
+the contract; `coverage.ts` is its machine form, **migrated to this rescoped target in R1**
+(ratcheted, never a red build). When scope changes, edit this file first.

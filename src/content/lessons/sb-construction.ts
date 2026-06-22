@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbConstruction: Lesson = {
   id: "sb-construction",
-  stage: 10,
+  stage: 12,
   title: "Building the Graph",
   summary:
     "A second brain has to be *populated* — and the gap between raw notes and clean triples is a pipeline, not a single step: find the mentions, link them to canonical entities, pull the relations, resolve who-is-who across a document, then fuse and reconcile facts from many sources.",

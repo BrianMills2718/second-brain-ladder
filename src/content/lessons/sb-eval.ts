@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbEval: Lesson = {
   id: "sb-eval",
-  stage: 13,
+  stage: 15,
   title: "Evaluation",
   summary:
     "You can't improve what you don't measure. A second brain is evaluated against a trusted gold standard with precision/recall, ranked predictions with Hits@K and MRR, confidence with calibration — and, uniquely for a symbolic system, logical consistency against your ontology.",
