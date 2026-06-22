@@ -28,6 +28,9 @@ export const REQUIRED_CONCEPTS: string[] = [
   "entailment", "reasoner", "open-world-assumption", "closed-world-assumption",
   "consistency", "llm-extraction", "hallucination", "entity-resolution",
   "neurosymbolic", "propose-verify", "provenance",
+  // retrieval decision ladder (R1 rescope, sb-retrieve — Slice 1)
+  "retrieval", "keyword-search", "vector-search", "hybrid-search",
+  "rag", "graphrag", "agentic-retrieval", "llm-wiki",
 ];
 
 /** Tier-A/B ideas explicitly DEFERRED (advisory, not a gate failure). Each will be
