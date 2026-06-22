@@ -6,7 +6,7 @@ import type { Lesson } from "../../types";
 
 export const sbLlmKg: Lesson = {
   id: "sb-llm-kg",
-  stage: 11,
+  stage: 13,
   title: "Using Your Brain with an LLM",
   summary:
     "Once you have a graph, an LLM becomes a far better partner: it answers grounded in your facts instead of hallucinating, turns your questions into runnable queries, helps bootstrap the schema, and uses the graph as durable memory.",

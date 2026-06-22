@@ -33,6 +33,8 @@ export const LESSONS: Lesson[] = [
   sbReasoning,
   sbExpressivity,
   sbNeural,
+  sbRetrieve,
+  sbFraming,
   sbNeurosymbolic,
   sbConstruction,
   sbLlmKg,
@@ -41,8 +43,6 @@ export const LESSONS: Lesson[] = [
   sbReasoningAdv,
   sbGovernance,
   sbGnn,
-  sbRetrieve,
-  sbFraming,
 ];
 
 export const UPCOMING: { stage: number; title: string }[] = [

@@ -12,7 +12,7 @@ import type { Lesson } from "../../types";
 
 export const sbRetrieve: Lesson = {
   id: "sb-retrieve",
-  stage: 17,
+  stage: 9,
   title: "Retrieve: the decision ladder",
   summary:
     "Storing knowledge is half a second brain; getting the right piece back out is the other half. There is no single best way to retrieve — there is a ladder of options, each fixing the last one's weakness at a new cost. The skill is matching the rung to your question and your budget, not picking a favorite.",

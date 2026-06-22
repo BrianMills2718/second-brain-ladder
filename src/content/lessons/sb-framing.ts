@@ -26,7 +26,7 @@ import type { Lesson } from "../../types";
 
 export const sbFraming: Lesson = {
   id: "sb-framing",
-  stage: 18,
+  stage: 10,
   title: "Framing: three ways to build a second brain",
   summary:
     "A neutral map of the whole subject before you pick any tool. A second brain stores your knowledge and hands the right piece back. Note-taking and knowledge graphs turn out to be the same artifact seen from two communities, and there are three honest ways to build one. The skill is choosing the right one for your goal and budget — not adopting a favorite.",
