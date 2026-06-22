@@ -22,6 +22,14 @@ arises, each with a disposition, triaged at **every slice boundary**. Dispositio
 | C14 | **`docs/research/` absent on the rescope branch** (the 17 notes live in PR #2) — Slice-1 authoring relied on RESCOPE_PLAN + standard knowledge, not the notes. | **open → mitigated:** ties C5; resolve via merge order (land research PR #2 into the rescope line) so later slices cite the evidence. |
 | C15 | **Advisory WARNs:** goal/sink-drift on `hybrid-search`/`graphrag`/`llm-wiki` (leaves); a `prose-forward-ref` false-positive on pre-existing `kg-rag` (common word "retrieval", not a chip). | **accepted:** leaves are enrichment terminals; the kg-rag hit is not a real forward ref. Revisit when the spine is re-anchored (C13). |
 
+**Re-plan (2026-06-22, after Slice 3):** Slices 1 & 3 proved the "author a module at the new
+bar" unknown is *retired*. By the skill's risk-ordering, the **biggest remaining unknown is
+now the spine re-anchor (C13)** — can we reorder stages / re-point `introducedIn` / demote
+the symbolic body without breaking the derive+gates? So the **next slice is promoted to the
+spine re-anchor** (attack it while only 2 modules need moving — cheap to be wrong now),
+*before* appending Represent/Construct/Operate/Plan content. Appending 4 more modules first
+would compound the re-anchor debt — the skill's "skipping cleanup" failure mode.
+
 *Triage log:*
 - 2026-06-22 (Slice 0 / R0 boundary) — C9 resolved; C1, C5, C7 the live watch items.
 - 2026-06-22 (Slice 1 boundary, post-audit) — adversarial audit of the Retrieve module: neutrality **PASS** (no favored rung; a confusion + quiz attack "newest=best default"), craft **PASS** (every acronym spelled out; concept-before-syntax; PEA; Therefore/But), correctness **PASS**. One real defect **found & fixed**: the judged activity's scenario (small/changing corpus) contradicted its keyed answer (GraphRAG) — reframed to a large/stable corpus so GraphRAG is unambiguous and the agentic-vs-graph cost contrast is taught. Opened C12–C15. Live watch: C1, C5/C14, C12.
