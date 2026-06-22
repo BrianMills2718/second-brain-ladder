@@ -104,6 +104,7 @@ eyeball legibility — it has caught render bugs the gates can't).
 | Doc | Role |
 |---|---|
 | `README.md` | project entry point (what/why, live URL, quickstart) |
+| `docs/ENGINE.md` | north-star design — one reusable engine + curriculum-as-data + a goal→curriculum generator ("Wikipedia for any goal") |
 | `docs/SYSTEM.md` | **this** — architecture, gate inventory, runbook (the durable reference) |
 | `docs/MACHINERY_NEEDED.md` | requirements & findings history (R1–R14 + pain log) — the *why* |
 | `docs/PATH_DERIVATION.md` | R14 methodology: deriving the path from the graph |

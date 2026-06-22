@@ -46,6 +46,9 @@ npm run screenshots    # headless visual pass (puppeteer; mandatory before "UI d
 Adding a concept or a module: see the runbook in `docs/SYSTEM.md` §3.
 
 ## Docs
+- **`docs/ENGINE.md`** — the north star: collapse the 3 forked sites into one reusable
+  engine that builds/gates/serves a curriculum from data, and generates one for *any*
+  goal ("a Wikipedia for any goal").
 - **`docs/SYSTEM.md`** — architecture, the gate inventory, the extend runbook (start here).
 - `docs/MACHINERY_NEEDED.md` — the discovered requirements + findings history (the *why*).
 - `docs/PATH_DERIVATION.md` — deriving the learning path from the concept graph.
