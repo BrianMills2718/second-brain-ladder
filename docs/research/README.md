@@ -73,8 +73,18 @@ symbolic stack onto the LLM-native one. One note per source, grouped by theme.
 - **The hard part of the LLM-Wiki paradigm is maintenance, not extraction** (dedup,
   aliases, dead links, contradictions, idempotent re-ingest) — a great teachable problem.
 - **Retrieval is a decision ladder, by question type and cost:** keyword → vector →
-  hybrid+rerank → GraphRAG (global/multi-hop) → agentic/LLM-wiki. This *is* the
-  skill-based spine.
+  hybrid+rerank → GraphRAG (global/multi-hop) → **agentic harness over files**. This *is*
+  the skill-based spine.
+- **At the agentic tier, SOTA is to *adopt a harness*, not build an agent.** The strongest
+  move for knowledge work over your own files is a capable agent harness (Claude Code,
+  Codex, Cursor, Cline) — billions invested in file-navigation/grep/read/reason/tool-use
+  out of the box. Simplest method: *plain files + "go find/synthesize X."* You **enrich**
+  it (MCP servers, connectors, plugins, skills, libraries), you don't reimplement it. This
+  *is* the Karpathy LLM-wiki paradigm in practice — and it's why PKM organization (MOCs,
+  links, `index.md`) matters: good structure is what lets the harness navigate. Building
+  your own ReAct/Self-RAG/CRAG loop is the **embedded/product** path (retrieval inside an
+  app you ship), not the SOTA move for a personal second brain — present it as that option,
+  fairly costed.
 
 **Curriculum spine (learner-empowerment framing — neutral on the "right" answer).** The
 goal is **practitioner capability**: equip the learner to *understand the alternatives →
@@ -85,7 +95,7 @@ its maintenance cost and lack of empirical proof). Organize on the builder's dec
 the full build lifecycle:
 - *Represent* — notes/links → property graph → KG (the DIGIMON graph-type ladder).
 - *Construct* — LLM extraction / GraphRAG indexing / wiki synthesis, with hallucination filtering.
-- *Retrieve* — the decision ladder: keyword → vector → hybrid+rerank → GraphRAG → agentic/LLM-wiki.
+- *Retrieve* — the decision ladder: keyword → vector → hybrid+rerank → GraphRAG → **agentic harness over files** (adopt + extend, not build).
 - *Operate & govern* — deploy, maintain, evaluate, update, manage cost.
 
 Critically, the tree must not stop at "understand"; it must carry the learner through
@@ -103,9 +113,13 @@ see the "In-practice" group above. Remaining concept/comparative notes, not yet 
 2. **Represent: property graph vs RDF + query languages + standards** *(HIGH)* — Cypher,
    ISO GQL (2024), RDF-star / RDF 1.2, schema.org, Wikidata, PROV (provenance), JSON-LD.
    The foundation of the *represent* decision page and the home of the RDF-vs-LPG fix.
-3. **Agentic RAG / agentic retrieval** *(MEDIUM-HIGH)* — ReAct, Self-RAG, CRAG
-   (corrective RAG), query planning, tool-use search. Ties the Karpathy-wiki idea to the
-   literature; the top of the retrieval ladder.
+3. **Agentic search — harness-first** *(HIGH)* — the SOTA top of the ladder: adopt a
+   capable agent harness (Claude Code, Codex, Cursor, Cline) over your files and enrich it
+   with **MCP servers / connectors / plugins / skills / libraries**; "plain files + go find
+   X" as the simplest method; how file/PKM organization aids navigation. Cover roll-your-own
+   loops (ReAct, Self-RAG, CRAG) only as the *embedded/product* contrast, fairly costed.
+   This is the practical home of the Karpathy LLM-wiki paradigm. *(Note: this reframes the
+   earlier "agentic RAG / build-your-own-agent" framing — see the cross-cutting finding above.)*
 4. **Evaluation, end to end** *(MEDIUM)* — RAGAS, GraphRAG-Bench, retrieval metrics, KG
    quality, faithfulness. Resonates with the methodology's gate/efficacy thread.
 5. **Specific GraphRAG systems, deep-dive** *(MEDIUM)* — LightRAG, HippoRAG/HippoRAG2,
