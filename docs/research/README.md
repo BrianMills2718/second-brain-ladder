@@ -34,6 +34,13 @@ symbolic stack onto the LLM-native one. One note per source, grouped by theme.
 | [awesome-knowledge-graph](awesome-knowledge-graph.md) | Canonical KG awesome-list (~1.9k★) | ~70–80% **legacy** graph-DB/semantic-web; no LLM/GraphRAG sections |
 | [open-kgo](open-kgo.md) | `mloda` plugin over 9 KG backends | Legacy symbolic exemplar to move *off* |
 
+### In-practice — plan → build → operate (the practitioner layer)
+| Note | What it is | Verdict |
+|---|---|---|
+| [plan-goal-to-architecture](plan-goal-to-architecture.md) | Goal → requirements → approach → architecture; neutral decision guide | The **planning skill**: map needs → a paradigm, sketch the components, MVP-first |
+| [implement-building-systems](implement-building-systems.md) | Framework build paths (LlamaIndex / LangChain / MS GraphRAG / Mem0 / Graphiti / LLM-wiki) | Same pipeline boxes everywhere; what differs is *when the LLM is called*; start at the vector-RAG floor and climb on evidence |
+| [operate-run-and-maintain](operate-run-and-maintain.md) | Day-2 ops: maintenance, eval-gating, cost/observability, governance/forgetting | **Maintenance is the hard, neglected part**; build the eval harness early |
+
 ### The human reality
 | Note | What it is | Verdict |
 |---|---|---|
@@ -87,23 +94,9 @@ thin on this *in-practice* layer — the biggest current gap (see backlog).
 
 ## Backlog — notes we still should have (advice)
 
-Prioritized; not yet written. **The "in-practice" cluster (8–10) is now top priority** —
-it's the layer the curriculum's plan→implement→operate goal most needs and the notes most
-lack.
+Prioritized. ✅ **The in-practice cluster (plan / implement / operate) is now written** —
+see the "In-practice" group above. Remaining concept/comparative notes, not yet written:
 
-*In-practice layer (the biggest gap):*
-8. **Implement: building the systems end-to-end** *(HIGH)* — LlamaIndex / LangChain
-   property-graph & KG indexes; standing up a GraphRAG pipeline; deploying an agent-memory
-   store (Mem0/Graphiti); building an LLM-wiki. Hands-on, framework-level "how you
-   actually build one."
-9. **Plan: goal → approach → architecture** *(HIGH)* — how to scope a build, elicit
-   requirements, pick a paradigm/stack for a given goal and budget, and sketch the
-   architecture. The decision-and-planning skill itself.
-10. **Operate: run & maintain** *(HIGH)* — maintenance (dedup, re-ingest, dead links,
-    contradiction handling), production eval, cost/latency/observability, updating a live
-    knowledge store. The "use it in practice" layer.
-
-*Concept/comparative layer:*
 1. **KG construction, LLM-driven** *(HIGH)* — RAKG, KGGen, OpenIE, schema-guided
    extraction, entity resolution / coreference, hallucinated-triple filtering
    (LLM-as-judge). The *construct* stage; the owner already surfaced the RAKG paper.
