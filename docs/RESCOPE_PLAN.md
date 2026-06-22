@@ -117,6 +117,67 @@ Each module: present the options as candidate solutions with costs (a natural
   independent neutrality pass finds no favored-paradigm tilt (or flags + fixes it).
 - **Verify:** the log exists; neutrality audit logged.
 
+## Execution — vertical slice roadmap (per the `design-plan` skill)
+The milestones R0–R5 are *thematic phases*; **execution is thin, vertical, risk-ordered
+slices** (a milestone like R1 is **not** one step — it is the sequence of module slices
+below). Live concern register: `docs/CONCERNS.md` (triaged at every slice boundary).
+
+**Modality split.** *Deductive* (specify + gate): the concept-graph structure, gates,
+coverage ratchet, render correctness, quiz/activity presence, lifecycle coverage — we have
+the theory (METHODOLOGY) and acceptance (gates). *Exploratory* (instrument + readout):
+whether the content actually *lands* (pre-empirical) — readout = the feedback-sidebar
+signal + the adversarial craft verdict; and the feedback-sidebar UX itself. Neutrality is
+auditable (deductive) but also has an exploratory readout ("does a reader feel pushed?").
+
+**Risk-ordered slice skeleton** (directional; re-plan after each; next 2 specified below):
+1. **Retrieve: the decision ladder** — one Foundations module, full vertical, at the new bar.
+2. **Feedback sidebar** — the readout instrument for the "does it land" unknown.
+3. **Framing / orientation** — three paradigms + PKM↔KG bridge; demote the symbolic-first intro.
+4. **Represent decision** — property-graph vs RDF, triple+limits, schema spectrum (OWL/DL → opt-in).
+5. **Construct** — LLM extraction + hallucination filtering + entity resolution.
+6. **Operate** — maintenance + evaluation (the neglected layer).
+7. **Plan/decide** — the requirements→approach meta-skill module.
+8. **Whole-graph audit** — neutrality + tension-resolution log + retire orphaned legacy concepts + complete the `coverage.ts` migration.
+
+```
+Slice 1 — "Retrieve: the decision ladder" module, end-to-end at the new bar
+  advances:        R1 (new spine) — the highest-contrast Foundations module
+  vertical scope:  author its concepts in concepts.ts (retrieval-ladder, keyword/BM25,
+                   vector-search/embeddings, hybrid+rerank, rag-fundamentals + failure
+                   modes, graphrag-local/global, agentic-harness-retrieval, llm-wiki) with
+                   prereqs + PREREQ_WHY/KIND; ratchet coverage.ts; a lesson (sb-retrieve)
+                   with concept-before-syntax + every-symbol-explained + PEA + Therefore/But,
+                   ≥3 misconception-bearing quiz items, ≥1 judged activity; register +
+                   render the module
+  de-risks:        the core bet — does decision-first + neutral + craft-heavy work
+                   end-to-end in the existing machinery (gates / derive / render)?
+  success (deductive): npm run check green (coverage ratchet, closure, band-closure);
+                   screenshots render the module + concepts (no single-column collapse);
+                   spot-check: no bare acronym / unexplained symbol / syntax-first intro;
+                   ≥3 nontrivial quiz items + ≥1 activity present
+  audit:           adversarial pass trying to break — (a) neutrality (favors a paradigm,
+                   esp. LLM-wiki?), (b) craft (any unexplained symbol/acronym; concept-
+                   after-syntax?), (c) correctness (RAG/GraphRAG claims; local-vs-global /
+                   no-global-view accurate?), (d) closure (forward refs?) → findings to CONCERNS.md
+  cleanup:         retire/relocate legacy querying concepts now superseded; no orphaned
+                   edges; coverage.ts entries match authored concepts
+  done-when:       check green ∧ screenshots clean ∧ audit findings dispositioned ∧
+                   cleanup done ∧ CONCERNS.md triaged
+
+Slice 2 — Per-section feedback sidebar (the readout instrument)
+  advances:        R4
+  vertical scope:  a per-section feedback control in the lesson UI capturing {route,
+                   section, tag(confusing|boring|wrong|missing), note}, persisted addressably
+  de-risks:        the exploratory "does the content land" unknown — builds the instrument
+                   that yields the readout for every later slice; also de-risks the new UI
+  success:         (deductive) e2e/screenshot pass exercises the widget on the Slice-1 route;
+                   submission captured. (exploratory readout it enables: per-section
+                   confusion/boredom signal)
+  audit:           submits on every section? leak/collision? a11y? → CONCERNS.md
+  cleanup:         add the widget's route(s) to the screenshot harness
+  done-when:       check green ∧ widget exercised in e2e ∧ audit dispositioned ∧ register triaged
+```
+
 ## Relationship to the methodology (dogfood + transfer test)
 This rescope is a **partial M5 hostile-transfer test** for the methodology
 (`godel-concept-ladder` ROADMAP M5). It stresses the machinery on a domain that is
