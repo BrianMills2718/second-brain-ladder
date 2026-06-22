@@ -31,6 +31,9 @@ export const REQUIRED_CONCEPTS: string[] = [
   // retrieval decision ladder (R1 rescope, sb-retrieve — Slice 1)
   "retrieval", "keyword-search", "vector-search", "hybrid-search",
   "rag", "graphrag", "agentic-retrieval", "llm-wiki",
+  // framing: three ways to build a second brain + how to choose (R1 rescope, sb-framing — Slice 3)
+  "second-brain", "pkm-bridge", "second-brain-paradigms",
+  "representation-choice", "schema-valid-vs-true",
 ];
 
 /** Tier-A/B ideas explicitly DEFERRED (advisory, not a gate failure). Each will be

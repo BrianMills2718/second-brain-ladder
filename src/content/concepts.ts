@@ -485,6 +485,39 @@ const CONCEPTS: Concept[] = [
     short: "Front-load the synthesis: instead of retrieving raw chunks at query time, an LLM (via @c{llm-extraction}-style summarization) maintains a set of clean, cross-linked wiki files that an @c{agentic-retrieval} agent reads and updates. Reads are fast and coherent because the thinking was done at write time. The cost is upkeep — the files can go stale or self-contradict, and the maintenance pass is itself non-deterministic.",
     example: "An agent keeps a `category-theory.md` page summarizing every note on the topic; you (or it) read that one page instead of re-searching 40 notes.",
     prerequisites: ["agentic-retrieval", "llm-extraction"], contrasts: ["agentic-retrieval"], introducedIn: "sb-retrieve" },
+
+  // ============ sb-framing: three ways to build a second brain (and how to choose) ============
+  // A NEUTRAL orientation to the whole subject. A second brain can be built three
+  // ways; the skill is CHOOSING, not adopting a favorite. These framing concepts
+  // reuse the already-introduced building blocks (knowledge-graph, retrieval, rag,
+  // graphrag, agentic-retrieval, llm-wiki, triple, property-graph, validation) so
+  // every @c{} chip below is a transitive prerequisite (closure holds). All
+  // foundations-band. See the sb-framing lesson for the narrative.
+  { id: "second-brain", term: "second brain", layer: "system", band: "foundations",
+    short: "A personal system that *stores* your knowledge and hands the *right* piece back when you ask. Storing is the write side; @c{retrieval} (getting the relevant piece back out of your @c{knowledge-graph} or notes) is the read side. Both halves matter — a store you can't query is a drawer, not a brain.",
+    example: "You save 500 notes over a year, then ask \"what did I conclude about category theory?\" and the right three come back.",
+    prerequisites: ["knowledge-graph", "retrieval"], introducedIn: "sb-framing",
+    microQuiz: [{ id: "mq-second-brain", type: "multiple-choice", prompt: "A 'second brain' is more than a pile of notes because it must also…", options: ["look pretty", "hand the RIGHT piece back when you ask (retrieval)", "be stored in the cloud", "use AI"], correct: 1, explanation: "Storing is half; retrieval — getting the relevant piece back out — is the other half." }] },
+  { id: "pkm-bridge", term: "PKM ↔ KG/AI bridge", layer: "system", band: "foundations",
+    short: "The unification: note-taking (PKM = Personal Knowledge Management) and knowledge graphs are ONE artifact seen from two communities. A bidirectional *backlink* between notes IS a @c{knowledge-graph} edge (a @c{relation} between two notes); the note app's *graph view* IS a KG visualization; *\"AI over my notes\"* IS @c{rag}; a hand-made index / Map-of-Content (MOC) note IS the index an agent navigates.",
+    example: "In Obsidian, linking `[[backpropagation]]` from your `[[neural nets]]` note draws an edge `(neural-nets, links-to, backpropagation)` — the same edge a KG would store.",
+    prerequisites: ["second-brain", "knowledge-graph", "rag"], introducedIn: "sb-framing",
+    microQuiz: [{ id: "mq-pkm-bridge", type: "true-false", prompt: "True or false: a bidirectional backlink between two notes is essentially a knowledge-graph edge.", correct: true, explanation: "A backlink is a named link between two notes — i.e. an edge between two entities, which is exactly a KG edge." }] },
+  { id: "second-brain-paradigms", term: "the three paradigms (and the choice)", layer: "system", band: "foundations",
+    short: "Three FAIR ways to build a second brain, each honestly costed — and the skill is CHOOSING, not picking a favorite. (a) *Symbolic KG*: model entities/relations explicitly and query/reason over a @c{knowledge-graph} — precise + inspectable, but heavy to build and brittle to messy reality. (b) @c{graphrag}: an LLM builds a graph from your notes and you retrieve over it — great global view, but expensive indexing. (c) *LLM-wiki / agentic* (@c{llm-wiki}, @c{agentic-retrieval}): an agent keeps navigable files and reads/maintains them — low build cost + human-readable, but upkeep + non-determinism. None is \"the answer\"; match the paradigm to your goal and budget.",
+    example: "Auditable compliance notes ⇒ symbolic KG; \"themes across 50k stable notes\" ⇒ GraphRAG; a fast-moving personal wiki you'll maintain ⇒ LLM-wiki/agentic. Different goals, different paradigms.",
+    prerequisites: ["second-brain", "knowledge-graph", "graphrag", "llm-wiki", "agentic-retrieval"], introducedIn: "sb-framing",
+    microQuiz: [{ id: "mq-paradigms", type: "multiple-choice", prompt: "Which is the expert move across the three paradigms?", options: ["always pick the symbolic KG — it's the most rigorous", "always pick the agentic/LLM-wiki — it's the newest", "match the paradigm to your goal and budget; none is universally best", "pick GraphRAG because it has a graph"], correct: 2, explanation: "Each paradigm has honest costs; the skill is choosing for the goal/budget, not adopting a favorite." }] },
+  { id: "representation-choice", term: "representation is a choice", layer: "data", band: "foundations",
+    short: "How you represent knowledge is a *modeling choice*, not one true way. The @c{triple} `(subject, predicate, object)` is RDF's choice — convenient, but awkward for *symmetric* facts (`Alice siblings Bob` needs the reverse triple too) and for *n-ary* facts (a job with employer + role + salary + dates). A @c{property-graph} instead puts attributes directly on edges; plain linked notes are a graph too. Pick the representation that fits the facts.",
+    example: "`(Alice, siblings, Bob)` alone doesn't entail `(Bob, siblings, Alice)` — you either add the reverse triple or declare the property symmetric. A property graph could attach `since: 1990` to the single sibling edge.",
+    prerequisites: ["triple", "property-graph"], introducedIn: "sb-framing",
+    microQuiz: [{ id: "mq-rep-choice", type: "true-false", prompt: "True or false: the (subject, predicate, object) triple is the one correct way to represent any fact.", correct: false, explanation: "It is one modeling choice (RDF's). It is awkward for symmetric and n-ary facts; property graphs and other models are valid alternatives." }] },
+  { id: "schema-valid-vs-true", term: "schema-valid ≠ true", layer: "logic", band: "foundations",
+    short: "A category error to avoid: a fact can be *well-formed* — valid JSON, a syntactically fine @c{triple}, passing @c{validation} — and still be FALSE. Structural correctness is about *shape*; truth is about *the world*. A schema checks the form; it cannot check the fact. `(Earth, hasMoonCount, 7)` is a perfectly valid triple and simply untrue.",
+    example: "`(Ada_Lovelace, bornIn, 1850)` is a well-formed triple that passes every schema check — and is false (she was born in 1815). Valid ≠ true.",
+    prerequisites: ["triple", "validation"], introducedIn: "sb-framing",
+    microQuiz: [{ id: "mq-schema-true", type: "multiple-choice", prompt: "A fact passes your schema validator. What does that tell you?", options: ["it is true", "it is well-formed / correctly shaped — but possibly false", "it will never need updating", "it was extracted by an LLM"], correct: 1, explanation: "Validation checks structure (shape), not truth. A perfectly valid fact can still be false." }] },
 ];
 
 export const CONCEPT_GRAPH: ConceptGraph = { concepts: CONCEPTS };
@@ -684,6 +717,20 @@ export const PREREQ_WHY: Record<string, string> = {
   "agentic-retrieval>rag": "agentic retrieval generalizes RAG's single retrieve-then-generate into a loop",
   "llm-wiki>agentic-retrieval": "an agent reads and maintains the wiki files",
   "llm-wiki>llm-extraction": "the wiki pages are LLM-synthesized summaries of source notes",
+  "second-brain>knowledge-graph": "the stored knowledge of a second brain is a knowledge graph (or linked notes, which are one)",
+  "second-brain>retrieval": "a second brain must hand the right piece back — retrieval is the read side",
+  "pkm-bridge>second-brain": "the bridge is about what a second brain IS, seen from two communities",
+  "pkm-bridge>knowledge-graph": "a backlink between notes is a knowledge-graph edge",
+  "pkm-bridge>rag": "'AI over my notes' is exactly RAG",
+  "second-brain-paradigms>second-brain": "the three paradigms are three ways to build a second brain",
+  "second-brain-paradigms>knowledge-graph": "the symbolic-KG paradigm models facts as a knowledge graph",
+  "second-brain-paradigms>graphrag": "GraphRAG is the second paradigm",
+  "second-brain-paradigms>llm-wiki": "the LLM-wiki paradigm front-loads synthesis into maintained files",
+  "second-brain-paradigms>agentic-retrieval": "the agentic paradigm has an agent read/maintain the files",
+  "representation-choice>triple": "the triple is the modeling choice being weighed (and its limits shown)",
+  "representation-choice>property-graph": "a property graph is the alternative that puts attributes on edges",
+  "schema-valid-vs-true>triple": "the example of a valid-but-false fact is a well-formed triple",
+  "schema-valid-vs-true>validation": "the point is that passing validation (shape) is not truth",
 };
 
 export function prereqWhy(concept: string, prereq: string): string | undefined {
@@ -884,6 +931,20 @@ export const PREREQ_KIND: Record<string, PrereqKind> = {
   "agentic-retrieval>rag": "refines",
   "llm-wiki>agentic-retrieval": "assumes",
   "llm-wiki>llm-extraction": "defined-via",
+  "second-brain>knowledge-graph": "part-of",
+  "second-brain>retrieval": "part-of",
+  "pkm-bridge>second-brain": "assumes",
+  "pkm-bridge>knowledge-graph": "defined-via",
+  "pkm-bridge>rag": "defined-via",
+  "second-brain-paradigms>second-brain": "assumes",
+  "second-brain-paradigms>knowledge-graph": "operates-on",
+  "second-brain-paradigms>graphrag": "part-of",
+  "second-brain-paradigms>llm-wiki": "part-of",
+  "second-brain-paradigms>agentic-retrieval": "part-of",
+  "representation-choice>triple": "operates-on",
+  "representation-choice>property-graph": "operates-on",
+  "schema-valid-vs-true>triple": "operates-on",
+  "schema-valid-vs-true>validation": "assumes",
 };
 
 export function prereqKindOf(concept: string, prereq: string): PrereqKind | undefined {

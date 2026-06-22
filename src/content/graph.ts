@@ -33,6 +33,7 @@ const BRANCH: Record<string, Branch> = {
   "sb-governance": "second-brain",
   "sb-gnn": "neural",
   "sb-retrieve": "second-brain",
+  "sb-framing": "second-brain",
 };
 
 const firstSentence = (s: string): string => (s.split(/(?<=\.)\s/)[0] ?? s).slice(0, 96);
