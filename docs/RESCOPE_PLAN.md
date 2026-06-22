@@ -67,13 +67,18 @@ Each module: present the options as candidate solutions with costs (a natural
 
 ## Milestones (each ends `npm run check` green + committed)
 
-### R0 — Scope contract + branch (this doc) — *in progress*
-- Rewrite `docs/DOMAIN_COVERAGE.md` for the new scope: a tiered key-ideas syllabus across
-  the three paradigms + the decision/lifecycle spine (Tier-A required / B suggested /
-  C non-goal), grounded in `docs/research/`.
-- **Success:** this plan + a rewritten DOMAIN_COVERAGE exist and define the new Tier-A set;
-  the R6 coverage gate is re-pointed at it (it will *fail* until R1 fills it — expected).
-- **Verify:** plan + coverage doc reviewed; coverage gate references the new contract.
+### R0 — Scope contract + branch (this doc) — *DONE*
+- Rewrote `docs/DOMAIN_COVERAGE.md` for the new scope: a tiered key-ideas syllabus across
+  the three paradigms + the decision/lifecycle spine (Tier-A required / B advisory /
+  C opt-in non-goal), grounded in `docs/research/`.
+- **Ratchet (refinement of the original "let it fail"):** `coverage.ts` keeps the *legacy*
+  REQUIRED set so `npm run check` stays **green**; R1 migrates `REQUIRED_CONCEPTS` to the
+  new contract **concept-by-concept as each is authored** — never a deliberately-red build
+  (honors the "each milestone ends green" standing rule). `coverage.ts` carries a migration
+  marker pointing at the new contract.
+- **Success:** this plan + the rescoped DOMAIN_COVERAGE exist and define the new Tier-A
+  target; `coverage.ts` references the new contract (migration marker); build green.
+- **Verify:** plan + coverage doc reviewed; `npm run check` green.
 
 ### R1 — New concept-graph spine (the rescope's core)
 - Author the decision/lifecycle modules in `concepts.ts`; demote symbolic content to one
