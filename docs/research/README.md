@@ -21,6 +21,7 @@ symbolic stack onto the LLM-native one. One note per source, grouped by theme.
 | [karpathy-gist](karpathy-gist.md) | Karpathy's "LLM Wiki" (Apr 2026): agent **builds & maintains** a persistent linked-markdown wiki; *anti-RAG* | Canonical statement of **agentic navigation > query-time retrieval** — the paradigm you favor |
 | [karpathywiki-obsidian](karpathywiki-obsidian.md) | `green-dalii/obsidian-llm-wiki` plugin implementing it (full-context, no embeddings) | A real, installable worked instance; the hard part is graph **maintenance** |
 | [open-knowledge-format](open-knowledge-format.md) | Google OKF v0.1 (Jun 2026): Markdown+frontmatter+wikilinks spec | Same pattern formalized; enterprise-interchange, **mostly out-of-scope** but a portability case study |
+| [agentic-harnesses](agentic-harnesses.md) | Adopt a capable agent harness (Claude Code/Codex/Cursor/Cline) over files + extend via MCP/connectors/plugins | **SOTA for personal knowledge work** — the practical home of the LLM-wiki paradigm; build-your-own is the embedded/product contrast |
 
 ### Agent memory (the substrate of a "second brain for agents")
 | Note | What it is | Verdict |
@@ -113,13 +114,9 @@ see the "In-practice" group above. Remaining concept/comparative notes, not yet 
 2. **Represent: property graph vs RDF + query languages + standards** *(HIGH)* — Cypher,
    ISO GQL (2024), RDF-star / RDF 1.2, schema.org, Wikidata, PROV (provenance), JSON-LD.
    The foundation of the *represent* decision page and the home of the RDF-vs-LPG fix.
-3. **Agentic search — harness-first** *(HIGH)* — the SOTA top of the ladder: adopt a
-   capable agent harness (Claude Code, Codex, Cursor, Cline) over your files and enrich it
-   with **MCP servers / connectors / plugins / skills / libraries**; "plain files + go find
-   X" as the simplest method; how file/PKM organization aids navigation. Cover roll-your-own
-   loops (ReAct, Self-RAG, CRAG) only as the *embedded/product* contrast, fairly costed.
-   This is the practical home of the Karpathy LLM-wiki paradigm. *(Note: this reframes the
-   earlier "agentic RAG / build-your-own-agent" framing — see the cross-cutting finding above.)*
+3. ✅ **Agentic search — harness-first** — *written:* [agentic-harnesses](agentic-harnesses.md).
+   (Adopt + extend a harness over files; MCP/connectors/plugins; roll-your-own loops as the
+   embedded/product contrast. Reframes the earlier "agentic RAG / build-your-own" framing.)
 4. **Evaluation, end to end** *(MEDIUM)* — RAGAS, GraphRAG-Bench, retrieval metrics, KG
    quality, faithfulness. Resonates with the methodology's gate/efficacy thread.
 5. **Specific GraphRAG systems, deep-dive** *(MEDIUM)* — LightRAG, HippoRAG/HippoRAG2,
