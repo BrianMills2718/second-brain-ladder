@@ -1,16 +1,17 @@
 /**
- * The Neural Side & Identity — embeddings, similarity, LLM extraction (+ its
- * failure mode), and entity resolution. Concept panels carry the definitions.
+ * Embeddings, Extraction & Identity — embeddings, similarity, LLM extraction
+ * (+ its failure mode), and entity resolution: the neural toolkit a modern second
+ * brain leans on. Concept panels carry the definitions.
  */
 import type { Lesson } from "../../types";
 
 export const sbNeural: Lesson = {
   id: "sb-neural",
   stage: 2,
-  title: "The Neural Side & Identity",
+  title: "Embeddings, Extraction & Identity",
   summary:
-    "Learned representations fill the gaps symbolic ones can't: embeddings give fuzzy similarity, LLMs extract triples from prose, and together they help decide when two records are the same entity. The price is no guarantees — neural output can be confidently wrong.",
-  prerequisites: ["sb-onto"],
+    "Three neural tools a modern second brain leans on: embeddings (fuzzy similarity by meaning, not exact words), LLM extraction (turning prose into triples), and entity resolution (deciding when two names are the same thing). Their power comes with a catch — neural output has no guarantees and can be confidently wrong, so it is a proposal to verify, not a fact to trust.",
+  prerequisites: ["sb-kg"],
   objectives: [
     "Say what an embedding buys (fuzzy similarity) and gives up (verifiability).",
     "Use LLM extraction to turn text into triples — and name its failure mode.",
@@ -31,11 +32,11 @@ export const sbNeural: Lesson = {
         ⟶  (Ada, wrote, note_1) , (note_1, is_about, category_theory)
 \`\`\`
 
-Fast and general — but it **@c{hallucination}s**: it will confidently emit a triple that isn't supported. That's why the next stage runs every extracted triple past the symbolic side before trusting it.`,
+Fast and general — but it **@c{hallucination}s**: it will confidently emit a triple that isn't supported. That's why a careful system treats every extracted triple as a *proposal* and verifies it before trusting it — the propose-and-verify idea you'll meet later.`,
     },
     {
       heading: "Who is who: entity resolution",
-      body: `Your notes will call the same person \`Ada\`, \`A. Lovelace\`, \`wd:Q7259\`. An **@c{identifier}** is just a name; **@c{sameas}** asserts two names denote one entity; **@c{entity-resolution}** decides *when* to draw that link — combining exact \`sameAs\` evidence with fuzzy @c{similarity}. (Note: \`sameAs\` is *same individual*, not @c{subclass}.)`,
+      body: `Your notes will call the same person \`Ada\`, \`A. Lovelace\`, \`wd:Q7259\`. An **@c{identifier}** is just a name; **@c{sameas}** asserts two names denote one entity; **@c{entity-resolution}** decides *when* to draw that link — combining exact \`sameAs\` evidence with fuzzy @c{similarity}. (Note: \`sameAs\` says two names denote the *same individual* — not that one *kind* of thing is a subtype of another.)`,
     },
   ],
   visualizations: [
