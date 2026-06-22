@@ -25,6 +25,7 @@ const SHOTS = [
   ["node/c-reasoning", "stage3-reasoning", true], // entailment viz + turtle code block
   ["node/c-neural", "stage4-neural", true], // entity resolution viz + code block
   ["node/c-neurosymbolic", "stage5-neurosymbolic", true], // propose→verify loop + code block
+  ["node/c-kg", "feedback-widget", "feedback"], // per-section feedback flag + session panel (Slice 2)
 ];
 
 const browser = await puppeteer.launch({
@@ -48,7 +49,7 @@ for (const [route, name, expand] of SHOTS) {
     await page.reload({ waitUntil: "domcontentloaded", timeout: 15000 }); // networkidle0 hangs on WSL
     await new Promise((r) => setTimeout(r, 1500)); // let KaTeX/React Flow settle
 
-    if (expand) {
+    if (expand === true) {
       // open the per-stage concept + notation rollups and the first inline chip
       await page.evaluate(() => {
         for (const sel of ["details.concept-panel", "details.notation-panel"]) {
@@ -59,6 +60,14 @@ for (const [route, name, expand] of SHOTS) {
       const chip = await page.$(".def-chip-trigger");
       if (chip) await chip.click().catch(() => {});
       await new Promise((r) => setTimeout(r, 500));
+    } else if (expand === "feedback") {
+      // Slice 2: capture a flag, open its popover + the session panel so the
+      // per-section feedback widget is visible in the shot.
+      const flag = await page.$(".sf-flag");
+      if (flag) await flag.click().catch(() => {});
+      const toggle = await page.$(".sf-panel-toggle");
+      if (toggle) await toggle.click().catch(() => {});
+      await new Promise((r) => setTimeout(r, 400));
     }
 
     const file = join(OUT, `${name}.png`);
