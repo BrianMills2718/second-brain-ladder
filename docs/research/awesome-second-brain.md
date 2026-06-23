@@ -1,0 +1,29 @@
+# awesome-second-brain — an AI-native "second brain" list framed around agent memory, not classic PKM
+
+- **URL / stars / activity:** https://github.com/aristoapp/awesome-second-brain — ~430 stars, 44 forks. Created 2026-01-12, last push 2026-06-16 (actively maintained, ~2 open issues / 3 open PRs). Apache-2.0. Owned by the `aristoapp` org.
+- **Type:** awesome-list
+- **What it is:** A curated guide to "building a self-evolving second brain that helps AI agents understand your personal and team context." This is squarely the **LLM/AI-native sense** of second brain — memory layers, retrieval substrates, and agent context plumbing — not the Obsidian/Notion/PARA/Zettelkasten note-taking tradition. Where it touches PKM tools (Obsidian, Logseq) it frames them as "local PKM with optional AI bridges," i.e. as substrates for agent memory rather than human-first note systems. Notably absent: Notion, Tana, Roam, Anytype, and the PARA/Zettelkasten methodology canon.
+- **Section map:** Organized along a five-stage **lifecycle** (Collect → Organize → Evolve → Use → Govern) crossed with solution **categories**:
+  - **End-To-End Apps** (Membase, OpenHuman, Khoj, Hjarni)
+  - **Local Workspaces** (GBrain, Hermes/LLM Wiki, Obsidian, Logseq, Honcho, Pad)
+  - **Agent Memory Layers** (Supermemory, Hyperspell, Hindsight, Mnemosyne, taOSmd, Mem0/OpenMemory)
+  - **Memory Substrates** (Zep/Graphiti, Cognee)
+  - **Platform Baselines** (ChatGPT Memory, Claude Projects/Code, NotebookLM)
+  - Plus decision aids: a chooser-by-lifecycle-gap, a capability matrix, setup-burden analysis, agent activation surfaces (MCP/API/SDK/CLI), local-vs-cloud, personal-vs-team.
+- **Notable entries:**
+  - **Zep / Graphiti** — temporal **knowledge-graph** memory with **Graph RAG**; the clearest formal-KG entry in the list.
+  - **Cognee** — graph-oriented memory infrastructure with SDK/MCP/API (KG + RAG over personal data).
+  - **Mem0 / OpenMemory** — user/run-scoped memory layer for LLM apps; the de-facto popular "memory API."
+  - **Supermemory** — hosted memory with connectors, MCP, API, SDK, browser plugins (broad ingestion + agentic retrieval).
+  - **Khoj** — chat/search (RAG) over local notes, files, docs, web — closest to "AI search over your notes."
+  - **GBrain** — agent-operated local brain exposing **pages, graph, timeline** + CLI/MCP (graph-style linking meets agents).
+  - **LLM Wiki (Hermes Agent)** — an inspectable local wiki that an agent compiles and maintains — essentially the **"Karpathy-style wiki for agents"** idea made concrete.
+  - **Honcho** — agent memory layer doing session context + user modeling.
+  - **Hyperspell** — workspace context with metadata, live search, procedural memory.
+  - **Mnemosyne** — local SQLite memory with MCP/SDK/CLI and consolidation (lightweight, self-hosted).
+  - **NotebookLM** — grounded RAG over a bounded source set (the "trusted corpus" baseline).
+  - **Obsidian / Logseq** — local PKM with **backlinks/graph view**, here positioned as AI-bridgeable note stores.
+  - **ChatGPT Memory / Claude Projects** — platform-local personalization as the do-nothing baseline.
+  - AI/LLM/RAG/agentic-retrieval flag: nearly the *entire* list is AI/agent-memory; KG-style linking shows up specifically in Zep/Graphiti, Cognee, GBrain, and the backlink-graph PKM tools (Obsidian/Logseq).
+- **Relevance to our curriculum:** This list is a useful reality check, but in the *opposite* direction from a typical PKM "second brain" list. The classic practitioner community (Tiago Forte's BASB, PARA, Zettelkasten, Obsidian power-users) is almost entirely **missing** here — no methods, no note-taking workflows, no PARA/Zettelkasten. Instead this is the **agent-infrastructure** crowd: ingestion connectors, memory APIs, MCP surfaces, consolidation/dedup, and graph/temporal RAG substrates. So the two worlds it spans are: (1) the human note-taking world (represented thinly by Obsidian/Logseq as bridgeable stores), and (2) the formal **KG/GraphRAG** world (Zep/Graphiti, Cognee). **Where they meet** is exactly our curriculum's sweet spot: linked/structured notes (backlinks, entities, graph view) + **AI search/retrieval over those notes** + the **"wiki for agents"** pattern (LLM Wiki/Hermes, GBrain) where an agent reads and maintains an inspectable, linkable knowledge store. The gap to be aware of: a learner who says "I want to build a second brain" may mean the PKM/note-taking experience (write, link, recall) far more than they mean an agent-memory backend; this list over-indexes on the latter. The lifecycle framing (Collect/Organize/Evolve/Use/Govern) is a clean scaffold worth borrowing for curriculum structure, and "Govern" (inspect/correct/delete/export/trust) is a dimension the academic KG framing usually under-serves.
+- **Caveats:** Maintained (last push days before writing) but young (created Jan 2026) and small (~430 stars). **Commercial bias is real and structural:** it is published by `aristoapp`, and the framing ("self-evolving," lifecycle "gaps," capability matrix, "setup burden") reads like vendor-comparison content; the products that fit that lifecycle vocabulary are favored, and Membase (the first end-to-end app) and the agent-memory layers may reflect the publisher's commercial interest. Treat the category boundaries and "capability matrix" claims as marketing-shaped, and verify any specific tool capability against its own docs. It is a map of the AI-memory vendor landscape, not a neutral survey of how people actually do personal knowledge management.
