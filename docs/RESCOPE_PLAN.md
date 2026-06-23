@@ -67,6 +67,11 @@ Each module: present the options as candidate solutions with costs (a natural
 
 ## Milestones (each ends `npm run check` green + committed)
 
+> ⚠️ STALE-INTERNAL (DOC_AUDIT 2026-06-23, F5): the R1–R5 blocks below read as *future
+> to-do*, but the "Execution — vertical slice roadmap" section further down marks **S1–S9
+> done**. The two halves disagree on status. Source of truth = the slice roadmap + `CONCERNS.md`;
+> these R-blocks need their status reconciled. Decision needed, not yet applied.
+
 ### R0 — Scope contract + branch (this doc) — *DONE*
 - Rewrote `docs/DOMAIN_COVERAGE.md` for the new scope: a tiered key-ideas syllabus across
   the three paradigms + the decision/lifecycle spine (Tier-A required / B advisory /

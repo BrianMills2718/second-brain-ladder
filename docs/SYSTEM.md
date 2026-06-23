@@ -4,6 +4,9 @@ The durable reference for second-brain-ladder. For the *why* (the discovered
 requirements + findings history) see `MACHINERY_NEEDED.md`; this doc is the *what is*
 and *how to*. Current size: **100 concepts / 17 modules / 20 skill nodes** (counts are
 not hand-maintained elsewhere — run `npm run check`, which prints them).
+> ⚠️ STALE (DOC_AUDIT 2026-06-23, F4): actual is now **113 concepts / 19 stages** after the
+> rescope (Retrieve/Framing/basics modules). This doc also still describes the *pre-rescope
+> symbolic-stack* scope as current — reconcile with `RESCOPE_PLAN.md`. Decision needed, not yet applied.
 
 ---
 
