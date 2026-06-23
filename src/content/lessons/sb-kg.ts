@@ -27,26 +27,37 @@ export const sbKg: Lesson = {
   ],
   sections: [
     {
-      heading: "Things, links, facts — the whole idea (no syntax yet)",
-      body: `Forget formats and code for a moment. A knowledge graph is just two things:
+      heading: "Why you'd even want this",
+      body: `You've kept notes for a year. Now you want to ask them a real question: *"What did I actually conclude about category theory — and which of the people I read pushed me there?"*
 
-- **Things** — the *nouns* your second brain knows about: a person, a note, an idea, a paper. We call each one an **@c{entity}**.
-- **Named, directed links** between them — the *verbs*: \`wrote\`, \`cites\`, \`is_about\`. We call each one a **@c{relation}**.
+Open your notes folder and… you can't. A folder is a stack of *separate* documents, and the answer to that question isn't inside any single note — it lives in the **connections between** them: this note *cites* that author, that author *wrote* the idea you leaned on. A plain folder throws those connections away.
 
-One link between two things is a **fact** ("Ada *wrote* note_1"). Collect enough facts and the web of them *is* a **knowledge graph** — your things, connected.
-
-That's the entire concept. Notice what it does **not** yet say: nothing here defines what \`wrote\` *means*, or what kinds of thing are allowed to \`write\`. That's the job of the *ontology* (a later stage). Right now a knowledge graph is **pure data**: which things link to which.`,
+So here's the move that makes a second brain a *brain* and not a drawer: **keep the connections.** That is the whole reason a knowledge graph exists — and once you see the shape, you'll start spotting it everywhere.`,
     },
     {
-      heading: "Writing one fact: the triple — and where it strains",
-      body: `The most common way to write a single fact down is a **triple**: three parts in order —
+      heading: "Picture it: a wall of photos and string",
+      body: `Picture a detective's evidence board. Photographs pinned to a corkboard — people, a café, a getaway car — and lengths of string between them, each one *labeled*: *"paid"*, *"was seen with"*, *"lied to"*. The detective never reads a report; she **traces the string** from one photo to the next and reads the story straight off the wall.
+
+That board *is* a **knowledge graph** — so let's name its parts:
+
+- each **photo** is a **thing** — an **@c{entity}** (a person, a note, an idea: the *nouns*);
+- each **labeled string** is a **named, directed link** — a **@c{relation}** (*wrote*, *cites*, *paid*: the *verbs*);
+- one string between two photos is a **fact**.
+
+Your notes become exactly this wall: notes, people, and ideas as the photos; *cites / wrote / is_about* as the strings. The whole wall is your knowledge graph — **not a pile of documents, but a web you can *follow*.**
+
+One thing the wall does *not* yet tell you: what *"paid"* actually means, or who is even allowed to *pay* whom. That is the job of the **ontology** (a later stage). Right now the graph is **pure data** — which things connect to which.`,
+    },
+    {
+      heading: "Writing one string down — the triple, and where it snaps",
+      body: `**Therefore:** to put one string-and-two-photos into a computer, you write the three parts down in order — a **triple**:
 
 \`\`\`text
 ( subject ,  predicate ,  object )
    Ada    ,    wrote    ,  note_1
 \`\`\`
 
-— the thing, the link, the other thing. This is **RDF's modeling choice**, and it's worth knowing *up front* that it is a **choice, not a law of nature**:
+— the thing, the link, the other thing. **But** that tidy shape is **RDF's modeling choice, not a law of nature**, and some facts refuse to fit three slots:
 
 - A **symmetric** fact has no natural subject vs. object: "Alice and Bob are siblings." A single \`(Alice, siblings, Bob)\` doesn't capture that Bob is equally Alice's sibling — you must either assert the reverse triple too, or separately declare the relation symmetric.
 - A **multi-part (n-ary)** fact doesn't fit three slots: "Ada wrote note_1, in 1843, in London." That's four facts about one event; in plain triples you invent a helper node to hold them.
@@ -55,7 +66,7 @@ So the triple is the simplest place to *start*, not the only way to model a fact
     },
     {
       heading: "Storing it · option 1 — RDF, reading Turtle symbol by symbol",
-      body: `**RDF** (the *Resource Description Framework*) stores facts as triples in which every name is a global **IRI** — an *Internationalized Resource Identifier*, a worldwide-unique name that looks like a web address, so that *your* \`Ada\` and *someone else's* \`Ada\` never get confused when datasets are merged.
+      body: `**Therefore those triples need somewhere to live.** The classic home is **RDF** (the *Resource Description Framework*), storing facts as triples in which every name is a global **IRI** — an *Internationalized Resource Identifier*, a worldwide-unique name that looks like a web address, so that *your* \`Ada\` and *someone else's* \`Ada\` never get confused when datasets are merged.
 
 A common text format for RDF is **Turtle**. Here is our little graph in Turtle — and then every symbol in it, explained:
 
@@ -77,7 +88,7 @@ So that block is exactly the two facts from above, written so every name is glob
     },
     {
       heading: "Storing it · option 2 — property graph, reading Cypher",
-      body: `A **property graph** (e.g. Neo4j) stores the same shape differently: it hangs **key/value properties** directly on the nodes and the edges — handy when a thing, or a *link*, carries lots of attributes. Its language is **Cypher**:
+      body: `**But RDF isn't the only home, and the triple isn't the only bet.** A **property graph** (e.g. Neo4j) stores the same shape differently: it hangs **key/value properties** directly on the nodes and the edges — handy when a thing, or a *link*, carries lots of attributes. Its language is **Cypher**:
 
 \`\`\`cypher
 CREATE (ada:Person {name:'Ada'})-[:WROTE {year:1843}]->(n:Note)
@@ -94,7 +105,7 @@ Same three things and a link — a different bet about *where attributes live*.`
     },
     {
       heading: "Choosing: RDF vs property graph — and the 'reasoning' myth",
-      body: `Here is the honest comparison, because the usual one is wrong.
+      body: `**Two homes for your facts — therefore a choice to make.** Here is the honest comparison, because the usual one is wrong.
 
 **The real differences are ecosystem and shape:**
 - **RDF** gives you global IRIs and W3C web standards (so data from different sources *merges* cleanly) and a *standardized* stack of reasoners (RDFS/OWL) that can derive new facts. Great when sharing across systems and standardized inference matter.
@@ -111,7 +122,7 @@ Same three things and a link — a different bet about *where attributes live*.`
       kind: "typed-graph",
       title: "A tiny knowledge graph: things linked by named relations",
       textualSummary:
-        "Three things (entities) — Ada, note_1, category_theory — connected by two named, directed links (relations): Ada 'wrote' note_1, and note_1 'is_about' category_theory. Each arrow is one fact. The nodes are the 'nouns', the labelled arrows are the 'verbs'; together they are a knowledge graph. (Whether you store each arrow as an RDF triple or a property-graph edge is a later choice — the picture is the same.)",
+        "The evidence board in miniature — three things (entities): Ada, note_1, category_theory — connected by two named, directed links (relations): Ada 'wrote' note_1, and note_1 'is_about' category_theory. Each arrow is one fact. The nodes are the 'nouns', the labelled arrows are the 'verbs'; together they are a knowledge graph. (Whether you store each arrow as an RDF triple or a property-graph edge is a later choice — the picture is the same.)",
       layers: ["data"],
       nodes: [
         { id: "ada", type: "Entity", layer: "data", label: "Ada", position: { x: 40, y: 60 } },

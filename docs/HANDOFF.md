@@ -39,16 +39,19 @@ open gap, and it's the actual product quality the owner cares about.
 
 ## 3. KNOWN GAPS (explicit, prioritized) — start here
 
-**G1 — the craft bar is only ~HALF met, even on the "good" pages.** `sb-kg`, `sb-retrieve`,
-`sb-framing` nail the *mechanical* layer (explain-every-symbol, concept-before-syntax, real
-quizzes) but are WEAK/MISSING on the three deepest principles (godel `METHODOLOGY.md` §11,
-after N. Case "How To Explain Things Real Good"):
-  - **(a) "Show what made you care"** — they open with *definitions*, not a motivating hook.
-  - **(b) PEA, picture/analogy FIRST** — they *tell* then show; visualizations are buried below the prose; no analogies.
-  - **(c) Therefore & But** — structured exposition, not a problem→solution tension chain.
-  These are *soft* desiderata the gates can't enforce — they need deliberate authoring. **This
-  is the real bar; the rewritten pages are a floor, not the target.** (Owner has NOT yet signed
-  off on a craft "voice" — e.g. an analogy style — so don't propagate a voice across pages blind.)
+**G1 — the full craft bar (the three deepest principles, godel `METHODOLOGY.md` §11, after
+N. Case).** Beyond the mechanical layer (explain-every-symbol, concept-before-syntax, real
+quizzes) a page must also: **(a) "show what made you care"** (open with a hook, not a
+definition); **(b) PEA — picture/analogy FIRST** (lead with a concrete image, then name the
+parts); **(c) Therefore & But** (a problem→solution tension chain, not a listicle). These are
+*soft* — no gate enforces them.
+  - ✅ **`sb-kg` now meets the FULL bar** and is the **template** — see **`docs/CRAFT_PATTERN.md`**
+    (hook → detective-evidence-board analogy → Therefore/But spine). Copy its shape.
+  - ⚠️ **`sb-retrieve` and `sb-framing` meet only the mechanical floor** — retrofit them to the
+    pattern (they open with definitions; PEA/hook are weak).
+  - ❌ **Legacy pages (stages 5–18) + orientation: no craft pass at all.**
+  (Owner has NOT yet signed off on the craft "voice" — e.g. the detective-board analogy style —
+  so confirm the voice on `sb-kg` before propagating it across every page.)
 
 **G2 — the legacy pages have had NO craft pass.** Stages 5–18 (query, modeling, onto, onto-eng,
 reasoning, expressivity, neurosymbolic, construction, llm-kg, kgml, eval, reasoning-adv,
