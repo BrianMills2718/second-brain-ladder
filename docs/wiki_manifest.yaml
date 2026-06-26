@@ -1,0 +1,17 @@
+---
+doc-role: wiki-manifest
+freshness: 2026-06-25
+---
+
+# Wiki Manifest — Second Brain Ladder
+
+id: second-brain-ladder
+portfolio_tier: personal
+description: >
+  Second Brain Ladder
+
+sources:
+  - path: ../README.md
+    role: overview
+  - path: ../CLAUDE.md
+    role: instructions
